@@ -48,7 +48,7 @@ contract or document that owns the behavior being changed.
 
 ## Stay in this province
 
-This repository is the harness foundation: run records, tool identity, and provider-shape checks. It is the floor. Capillary, myosotis, aestivation, and drosera are peers beside each other, not steps above this package. Bloom is the only composer and does not import this package. Trellis is outside the call path. This task does not edit them.
+This repository is the harness foundation: run records, tool identity, and provider-shape checks. It is the floor. Capillary, myosotis, aestivation, and drosera are peers beside each other, not steps above this package. Bloom is the only composer, and since Bloom 0.7.0 it imports this package for provider validation. Trellis is outside the call path. This task does not edit them.
 
 Do not add a listener, a memory store, a retrieval corpus, a roster of specialists, or a connector. A stage named in `docs/roadmap.md` as `specified` or `planned` is not code to invent in passing.
 
@@ -56,7 +56,7 @@ Do not add a listener, a memory store, a retrieval corpus, a roster of specialis
 
 A change here is finished when this repository's tests pass. Do not open bloom, drosera, or trellis in the same task to keep them in step.
 
-The compatible surface is the exports and the tests. A repository that does not import this package cannot break because this package changed. Bloom does not import it. Capillary, myosotis, and aestivation do not import it.
+The compatible surface is the exports and the tests. A repository that does not import this package cannot break because this package changed. Capillary, myosotis, and aestivation do not import it. Bloom does: it pins one seed commit and calls `validateProvider` and `normalizeGeneration` (see `docs/bloom-interop.md`). A seed change reaches Bloom only when Bloom moves its pin, but a breaking change to those exports or to the generation record still breaks Bloom on its next move.
 
 Drosera keeps a local copy of the tool grammar. That copy can lag. The lag is debt, paid later in drosera, not depth you must finish now. Name the lag in the change note. Do not edit drosera.
 
