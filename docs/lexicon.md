@@ -38,9 +38,10 @@ role terms on the right. The internal column is naming only.
 | ViDesign | (proper noun) `videsign` | The shared design system |
 | ViTools | (proper noun) `vitools` | The public skills/agents/tools registry |
 | V37 / the cluster | the local cluster | Private infrastructure; never described beyond that |
-| Memorix | (proper noun for the project), otherwise the memory fabric | Governed memory with consent and forget |
+| Memorix | (proper noun) `myosotis` for the public successor, otherwise the memory fabric | Governed memory with consent and forget |
 | Tri-Cluster | the storage triangle | Record authority, cache projection, graph projection |
-| ARKSRRA | admission and ratification loop | Plan proposal, review, and the gate before assembly |
+| ARKSRRA | (proper noun) `aestivation` for the public successor, otherwise the admission and ratification loop | Plan proposal, review, and the gate before assembly |
+| (the context store) | (proper noun) `capillary`, otherwise the context retrieval system | Provenance-honest, bounded retrieval and context relations |
 | Violet, Wisteria, Xylia, Yarrow, Zinnia | persona seats, or the cabinet | Character canon; roles only in prose |
 | VI / OAI / LA (Bloom's role labels) | coordinator / model-backed specialist / deterministic verifier | Team roles Bloom defines in its own docs |
 
@@ -54,8 +55,21 @@ Notes on the odd ones out:
   belong to the design canon and the surfaces that present them. A harness document has
   no business naming characters: the run model needs owners, coordinators, specialists,
   and verifiers, not a cast.
-- **The `Ark` prefix family.** Historical admission-transport names are retired in
-  public prose. The loop concept is identified by what it does.
+- **The `Ark` prefix family.** The historical admission-transport name is settled: its
+  public successor is `aestivation`. In prose the concept stays the admission and
+  ratification loop.
+
+## Family naming: the botanic line
+
+The public-product family takes its names from botany (ratified by the owner,
+2026-11-23): `seed` (the harness foundation) → `capillary` (context retrieval) →
+`myosotis` (memory: consent, keep, forget) → `aestivation` (admission and review before
+assembly) → `bloom` (the opened team workspace). The line mirrors the house canon —
+Violet, Wisteria, Xylia, Yarrow, and Zinnia are all flowering plants — but products are
+named for their function, never for a character. Each family name is an ordinary
+botanical word that says what its system does, per
+[capillary's family.md](https://github.com/Vidoxlabs/capillary/blob/main/docs/family.md).
+A new public product earns its name the same way.
 
 ## Applying it in review
 

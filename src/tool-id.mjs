@@ -17,7 +17,7 @@ const VERBS = new Set([
 ]);
 
 export const RESERVED_DOMAINS = new Set([
-  'vcs', 'docs', 'edge', 'telemetry', 'memory', 'ingest', 'compute',
+  'vcs', 'docs', 'edge', 'telemetry', 'memory', 'ingest', 'compute', 'context',
 ]);
 
 export class ToolIdError extends Error {}

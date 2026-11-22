@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   parseToolId, formatToolId, isValidToolId, isWellFormedRegistryEntry, ToolIdError,
+  RESERVED_DOMAINS,
 } from '../src/tool-id.mjs';
 import { validateProvider, normalizeGeneration } from '../src/provider.mjs';
 import {
@@ -36,6 +37,11 @@ test('formatToolId validates while it composes', () => {
   assert.equal(formatToolId({ domain: 'vcs', resource: 'file', verb: 'read' }), 'vcs.file.read');
   assert.equal(formatToolId({ domain: 'ingest', resource: 'job', verb: 'create' }), 'ingest.job.create');
   assert.throws(() => formatToolId({ domain: 'vcs', verb: 'fetch' }));
+});
+
+test('the context domain stays reserved for the retrieval system', () => {
+  assert.equal(RESERVED_DOMAINS.has('context'), true);
+  assert.equal(RESERVED_DOMAINS.has('compute'), true);
 });
 
 test('registry entries carry connector identity and effect classes', () => {
