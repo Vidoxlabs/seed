@@ -1,0 +1,67 @@
+# Contract: tool identity
+
+Status: `specified`; parsing and validation are `implemented` in `src/tool-id.mjs`.
+
+## The grammar
+
+```
+tool-id    = domain "." ( resource "." )? [ sub "." ] verb
+segment    = [a-z] [a-z0-9-]*
+```
+
+- Two to four segments. The **first** segment is the `domain`; the **last** is the
+  `verb`; between them, at most one `resource` and one `sub`, in that order.
+- Lowercase letters, digits, and hyphens only. No uppercase, no underscores, no dots
+  inside a segment.
+
+```
+vcs.file.read
+vcs.repo.read
+docs.file.metadata.read
+edge.zone.read
+telemetry.search
+memory.context.read
+ingest.job.create
+ingest.job.cancel
+compute.rows.verify
+```
+
+## What an ID never carries
+
+A tool ID is neutral by construction. It never contains:
+
+- a vendor, product, or brand name — vendor identity lives in **connector binding**,
+- a hostname, address, port, container, cluster, or environment name,
+- a persona or character name,
+- an implementation detail (protocol, SDK, client library, or method chain).
+
+An ID states **what the tool does**, in domain terms. The registry entry carries the rest.
+
+## Registry entry
+
+Each admitted tool is registered with:
+
+| Field | Meaning |
+| --- | --- |
+| `toolId` | the neutral ID (`vcs.file.read`) |
+| `connector` | the binding that actually performs it (carries the vendor identity) |
+| `effect` | `read` \| `write` \| `destructive` \| `credential` |
+| `realm` | the data scope the tool may touch |
+| `thirdPartyEgress` | `true` when the effect leaves the owner's systems |
+| `ownerGate` | `true` when the effect pauses the run for an owner decision |
+| `inputSchema` | the validated argument shape |
+| `legacyNames` | read-only aliases kept for migration; never new work |
+
+## Reading classes
+
+- `read`-effect tools run inside the attempt's admitted scopes by default.
+- Every non-read class is admitted per objective (`allowedTools`) and intended-before-
+  effect (see [run-model.md](run-model.md)). `credential` and third-party egress
+  additionally set `ownerGate`.
+
+## Verification
+
+`src/tool-id.mjs` exports `parseToolId`, `formatToolId`, `isValidToolId`, and
+`isWellFormedRegistryEntry`; the tests exercise grammar edges, forbidden-token classes,
+and registry-entry shape. Renames are additive: `legacyNames` point back, and the
+neutral ID stays the one true name.
