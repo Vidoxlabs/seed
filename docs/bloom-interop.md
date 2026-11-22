@@ -8,7 +8,7 @@ modes today: a hosted service, an OpenCode-compatible server, and any chat-compl
 HTTP service via `--api-base`. Seed lands in three stages, each consumable by Bloom the
 day it ships.
 
-## Stage 1 — shared contract modules (`implemented`, `0.1.0`)
+## Stage 1 — shared contract modules (`implemented`, `0.2.0`)
 
 Bloom (and any workspace) can adopt seed's modules directly:
 

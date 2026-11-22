@@ -68,6 +68,43 @@ export function isValidToolId(id) {
 const EFFECT_CLASSES = new Set(['read', 'write', 'destructive', 'credential']);
 
 /**
+ * How a tool's effects can be undone. A declaration, never an executor: seed checks the
+ * posture and never runs a rollback on its own.
+ */
+export const ROLLBACK_POSTURES = [
+  'unsupported', 'compensating_action', 'restore_snapshot', 'manual_recovery_required',
+];
+
+const ROLLBACK_FIELDS = new Set(['posture', 'description', 'compensatingTool']);
+
+function rollbackErrors(rollback) {
+  if (rollback === undefined) return [];
+  if (rollback === null || typeof rollback !== 'object' || Array.isArray(rollback)) {
+    return ['rollback must be an object when present.'];
+  }
+  const errors = [];
+  const { posture, description, compensatingTool } = rollback;
+  if (!ROLLBACK_POSTURES.includes(posture)) errors.push(`rollback.posture must be one of ${ROLLBACK_POSTURES.join(', ')}.`);
+  if (description !== undefined && typeof description !== 'string') errors.push('rollback.description must be a string when present.');
+  const named = compensatingTool !== undefined && compensatingTool !== null;
+  if (posture === 'compensating_action') {
+    if (!named) errors.push('A compensating_action rollback names its compensatingTool.');
+    else if (!isValidToolId(compensatingTool)) errors.push(`rollback.compensatingTool "${compensatingTool}" is not a well-formed tool ID.`);
+  } else if (named) {
+    errors.push('rollback.compensatingTool belongs only to the compensating_action posture.');
+  }
+  for (const key of Object.keys(rollback)) {
+    if (!ROLLBACK_FIELDS.has(key)) errors.push(`rollback.${key} is not a known rollback field.`);
+  }
+  return errors;
+}
+
+/** The declared rollback posture of a registry entry; an entry that declares none is `unsupported`. */
+export function rollbackPosture(entry) {
+  return entry?.rollback?.posture ?? 'unsupported';
+}
+
+/**
  * Check a registry entry's shape. Returns { ok, errors }. Effect classes gate runs;
  * connector bindings carry the vendor identity; legacy names are aliases, not truths.
  */
@@ -75,7 +112,7 @@ export function isWellFormedRegistryEntry(entry) {
   const errors = [];
   const fail = (message) => errors.push(message);
   if (entry === null || typeof entry !== 'object') return { ok: false, errors: ['A registry entry must be an object.'] };
-  const { toolId, connector, effect, realm, thirdPartyEgress, ownerGate, inputSchema, legacyNames } = entry;
+  const { toolId, connector, effect, realm, thirdPartyEgress, ownerGate, inputSchema, legacyNames, rollback } = entry;
   try { parseToolId(toolId); } catch (error) { fail(error.message); }
   if (typeof connector !== 'string' || connector.length === 0) fail('connector must be a non-empty string.');
   if (!EFFECT_CLASSES.has(effect)) fail(`effect must be one of ${[...EFFECT_CLASSES].join(', ')}.`);
@@ -85,5 +122,33 @@ export function isWellFormedRegistryEntry(entry) {
   if (inputSchema === undefined || inputSchema === null || typeof inputSchema !== 'object') fail('inputSchema must be an object.');
   if (legacyNames !== undefined && !Array.isArray(legacyNames)) fail('legacyNames must be an array when present.');
   if (Array.isArray(legacyNames)) for (const name of legacyNames) if (!isValidToolId(name)) fail(`Legacy name "${name}" is not a well-formed tool ID.`);
+  errors.push(...rollbackErrors(rollback));
+  return { ok: errors.length === 0, errors };
+}
+
+/**
+ * Check a set of registry entries together. Each entry must be well formed, each tool ID
+ * is registered once, and every compensating tool a rollback names is itself registered.
+ * Errors are prefixed with the entry's tool ID (or its index). Returns { ok, errors }.
+ */
+export function checkRegistry(entries) {
+  if (!Array.isArray(entries)) return { ok: false, errors: ['A registry is an array of entries.'] };
+  const errors = [];
+  const label = (entry, index) => (typeof entry?.toolId === 'string' && entry.toolId ? entry.toolId : `#${index}`);
+  const registered = new Set();
+  entries.forEach((entry, index) => {
+    for (const message of isWellFormedRegistryEntry(entry).errors) errors.push(`${label(entry, index)}: ${message}`);
+    const id = entry?.toolId;
+    if (typeof id !== 'string') return;
+    if (registered.has(id)) errors.push(`${id}: registered more than once.`);
+    registered.add(id);
+  });
+  entries.forEach((entry, index) => {
+    const compensatingTool = entry?.rollback?.compensatingTool;
+    if (entry?.rollback?.posture !== 'compensating_action' || typeof compensatingTool !== 'string') return;
+    if (!registered.has(compensatingTool)) {
+      errors.push(`${label(entry, index)}: compensating tool "${compensatingTool}" is not registered.`);
+    }
+  });
   return { ok: errors.length === 0, errors };
 }

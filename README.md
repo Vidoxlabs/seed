@@ -6,7 +6,7 @@ agent workspaces like [Bloom](https://github.com/Vidoxlabs/bloom) can orchestrat
 model-backed workers, tools, and shared artifacts without depending on any single hosted
 service or third-party harness.
 
-**Status: `0.1.0` — specification and contract modules.** The contracts, grammar, and
+**Status: `0.2.0` — specification and contract modules.** The contracts, grammar, and
 validators in this repository are implemented and covered by `npm test`. The runtime
 services on the roadmap are specified or planned, not shipped. Nothing in this repository
 opens a network listener, calls a hosted model, or touches your files today.
@@ -30,8 +30,8 @@ inspectable foundation:
 
 | Module | What it does |
 | --- | --- |
-| `src/tool-id.mjs` | Parse, format, and validate the neutral tool ID grammar |
-| `src/run-model.mjs` | Objective/attempt records, run statuses, and legal transitions |
+| `src/tool-id.mjs` | Parse, format, and validate the neutral tool ID grammar; check registry entries, rollback postures, and cross-entry references |
+| `src/run-model.mjs` | Objective/attempt records, run statuses, legal transitions, and intent-time tool admission |
 | `src/provider.mjs` | Validate provider adapters and normalize generation results |
 
 `npm install && npm test` verifies all of it. There are no runtime dependencies.

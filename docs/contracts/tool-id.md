@@ -51,6 +51,39 @@ Each admitted tool is registered with:
 | `ownerGate` | `true` when the effect pauses the run for an owner decision |
 | `inputSchema` | the validated argument shape |
 | `legacyNames` | read-only aliases kept for migration; never new work |
+| `rollback` | optional rollback declaration (below); absent means `unsupported` |
+
+## Rollback posture
+
+A registry entry may declare how its effects can be undone:
+
+```js
+rollback: { posture, description?, compensatingTool? }
+```
+
+| `posture` | Meaning |
+| --- | --- |
+| `unsupported` | nothing can be rolled back; the default, and the honest answer for reads |
+| `compensating_action` | another registered tool undoes the effect; `compensatingTool` names it |
+| `restore_snapshot` | the effect is undone by restoring a prior snapshot |
+| `manual_recovery_required` | undoing the effect needs an owner's hands |
+
+Rules:
+
+1. **A declaration, not an executor.** Seed checks the posture. It never runs a rollback,
+   and no posture makes an effect safe to repeat on restart (see
+   [run-model.md](run-model.md), rule 3).
+2. `compensatingTool` is required for `compensating_action`, must be a well-formed tool
+   ID, and is refused on any other posture. A tool may name itself.
+3. Unknown fields inside `rollback` are refused.
+
+## Registry check
+
+`checkRegistry(entries)` checks a set of entries together: every entry is well formed,
+each `toolId` is registered once, and every `compensatingTool` is itself a registered
+`toolId`. Each error is prefixed with the entry's tool ID, or `#<index>` when the entry
+has none. This is validation over a list the caller holds. The registry service that
+publishes and serves entries is stage 3.2 and stays `specified`.
 
 ## Reading classes
 
@@ -61,7 +94,9 @@ Each admitted tool is registered with:
 
 ## Verification
 
-`src/tool-id.mjs` exports `parseToolId`, `formatToolId`, `isValidToolId`, and
-`isWellFormedRegistryEntry`; the tests exercise grammar edges, forbidden-token classes,
-and registry-entry shape. Renames are additive: `legacyNames` point back, and the
+`src/tool-id.mjs` exports `parseToolId`, `formatToolId`, `isValidToolId`,
+`isWellFormedRegistryEntry`, `checkRegistry`, `rollbackPosture`, and `ROLLBACK_POSTURES`;
+the tests exercise grammar edges, forbidden-token classes, registry-entry shape, rollback
+declarations, and cross-entry references. The grammar itself did not change in `0.2.0`;
+`rollback` is an additive, optional registry field. Renames are additive: `legacyNames` point back, and the
 neutral ID stays the one true name.

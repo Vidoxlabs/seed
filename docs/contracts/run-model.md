@@ -21,6 +21,8 @@ history.
 An attempt is one try at an objective:
 
 - `objectiveId`, `attempt` number, `lease` token.
+- `allowedTools` — a copy of the objective's admission list, taken when the attempt
+  starts. A later edit to the objective object does not widen it.
 - `recordedIntents` — each intended effect appended **before** the effect runs: tool ID,
   arguments digest, target scope. Intent-first ordering means a restart can tell the
   difference between "was about to", "probably ran", and "recorded as done".
@@ -61,6 +63,19 @@ Legal transitions:
    and lands at `stopped` with what it completed left truthful.
 5. **The gate binds to the digest.** An owner decision names the exact digest of the
    action it approves. A changed action needs a new decision.
+6. **Admission is checked at intent time, and fails closed.** `recordIntent` refuses a
+   tool ID that is not on the attempt's `allowedTools`. An attempt record that carries no
+   admission list admits nothing, and `createAttemptRecord` refuses an objective whose
+   admission list is empty or malformed.
+
+## Changes
+
+- `0.2.0` — rule 6 is new in code. Before `0.2.0` the contract said "not on the list,
+  not callable" but `recordIntent` did not check the list, so a caller could record an
+  intent for an unadmitted tool. That call now throws `RunModelError`. This is a
+  tightening of an existing export. It is released as a minor bump because seed is
+  pre-1.0 and no repository imports it yet; a caller that recorded unadmitted intents
+  must add the tool to the objective's `allowedTools` or stop.
 
 ## Relation to the provider contract
 

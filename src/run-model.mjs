@@ -69,22 +69,34 @@ export function createAttemptRecord({ objective, attempt = 1 }) {
     throw new RunModelError('An attempt starts only while its objective is running.');
   }
   if (!Number.isSafeInteger(attempt) || attempt < 1) throw new RunModelError('Attempt numbers start at 1.');
-  if (!objective.allowedTools.every(toolId => isValidToolId(toolId))) {
+  const admitted = objective.allowedTools;
+  if (!Array.isArray(admitted) || admitted.length === 0 || !admitted.every(toolId => isValidToolId(toolId))) {
     throw new RunModelError('The objective must be re-created before an attempt names its tools.');
   }
   return {
     objectiveId: objective.id,
     attempt,
     lease: randomUUID(),
+    allowedTools: [...admitted],
     recordedIntents: [],
     receipts: [],
   };
 }
 
-/** Record the intended effect before it runs. Returns a new attempt record. */
+/**
+ * Record the intended effect before it runs. Admission is checked here: a tool not on the
+ * attempt's admission list is refused, and an attempt with no admission list admits
+ * nothing. Returns a new attempt record.
+ */
 export function recordIntent(attempt, { toolId, argumentsDigest, scope }) {
   if (typeof toolId !== 'string' || !isValidToolId(toolId)) {
     throw new RunModelError('An intent names a well-formed tool ID.');
+  }
+  if (!Array.isArray(attempt.allowedTools)) {
+    throw new RunModelError('The attempt carries no admission list; start it with createAttemptRecord.');
+  }
+  if (!attempt.allowedTools.includes(toolId)) {
+    throw new RunModelError(`Tool "${toolId}" is not admitted to objective ${attempt.objectiveId}. Not on the list, not callable.`);
   }
   const digestIsHex = typeof argumentsDigest === 'string' && /^[0-9a-f]{64}$/.test(argumentsDigest);
   if (!digestIsHex) throw new RunModelError('An intent carries the 64-hex digest of its arguments.');

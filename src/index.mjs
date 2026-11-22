@@ -1,6 +1,6 @@
 /** Seed contract modules. The harness runtime is staged; these contracts are the floor. */
 
-export const VERSION = '0.1.0';
+export const VERSION = '0.2.0';
 
 export * from './tool-id.mjs';
 export * from './provider.mjs';
@@ -11,7 +11,8 @@ const about = () => `
 seed ${VERSION} — a local-first agent harness foundation. Contract modules only.
 
 Contracts (implemented):
-  tool-id    parseToolId, formatToolId, isValidToolId, isWellFormedRegistryEntry
+  tool-id    parseToolId, formatToolId, isValidToolId, isWellFormedRegistryEntry,
+             checkRegistry, rollbackPosture, ROLLBACK_POSTURES
   run-model  createObjective, transition, createAttemptRecord, recordIntent, attachReceipt
   provider   validateProvider, normalizeGeneration
 
