@@ -70,7 +70,7 @@ Legal transitions:
 
 ## Resume
 
-`resumeSteps({ steps, completed, execute, dryRun = false })` in `src/resume.mjs` runs a list of steps in
+`resumeSteps({ steps, completed, execute, dryRun = false, abort })` in `src/resume.mjs` runs a list of steps in
 order and carries forward what a previous attempt finished:
 
 1. A step whose id is in `completed` is reported `skipped`. `execute` is not called for
@@ -94,6 +94,26 @@ A supplied value outside this list refuses the executor result, even when it cla
 `ok: true`. The report records a failed step with `code: 'invalid-failure-class'`,
 omits the invalid field, and retains the completed ids from before that failure.
 
+### Abort
+
+`abort` is optional. When it is omitted, every rule above holds unchanged. When it is
+one of `ABORT_CODES` — `operator-abort`, `lease-expired`, `policy-revoked`,
+`max-attempts-exceeded`, the codes the predecessor maintenance jobs used — the run
+stops before any pending step runs:
+
+1. `execute` is never called, and an abort accepts an omitted `execute`.
+2. Steps in `completed` stay `skipped`, and `completed` is returned unchanged.
+3. Every pending step is `not_reached`, with a detail naming the abort.
+4. The result has status `aborted` and carries `abortCode`. No step carries a
+   `failureClass` or a refusal `code`: an abort is not a failure.
+5. A code outside the list throws `ResumeError` before any step runs. So does `abort`
+   together with `dryRun: true`, because a dry run is not an abort.
+6. A `completed` id the plan does not hold is still refused (rule 3).
+
+The code is the whole record. Seed keeps no job store, no attempt count, no abort
+detail text, and no clock for it, and writes no journal file. Deciding to abort, for
+example on an expired lease, is the caller's call; this function only records it.
+
 This is an in-process rule. Keeping `completed` across a process restart is the durable
 run store, stage 3.1, which stays `specified`.
 
@@ -116,6 +136,11 @@ Leases are records the caller keeps. Seed stores none of them.
 
 ## Changes
 
+- `0.7.0` adds the optional `abort` argument to `resumeSteps` and the `ABORT_CODES`
+  export. An aborted run calls no executor and returns status `aborted` with
+  `abortCode`. Calls that omit `abort`, including dry runs and failure classes, keep
+  their behavior and report shape. A caller that switched on the three statuses
+  `complete`, `failed`, and `dry_run` sees `aborted` only when it passes `abort`.
 - `0.6.0` adds optional failure classes to failed `resumeSteps` outcomes. Results
   that omit `failureClass` keep their existing shape and behavior.
 - `0.5.0` — `resumeSteps` adds an opt-in dry run. Calls that omit `dryRun` keep their

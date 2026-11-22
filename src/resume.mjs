@@ -20,6 +20,17 @@ const FAILURE_CLASSES = [
   'external-incompatible',
 ];
 
+/**
+ * Why a run stops before any pending step runs. Ported from the predecessor's abort
+ * codes; the code is the whole record (no store, no clock, no detail text).
+ */
+export const ABORT_CODES = Object.freeze([
+  'operator-abort',
+  'lease-expired',
+  'policy-revoked',
+  'max-attempts-exceeded',
+]);
+
 export class ResumeError extends Error {}
 
 /** Raised when a live lease is already held. Carries the lease that blocked the claim. */
@@ -58,11 +69,20 @@ function checkPlan(steps) {
  * and `completed` are in plan order.
  * With `dryRun: true`, the status is `dry_run` and pending steps are `would_run`.
  * A dry run accepts an omitted `execute` and records only previously completed ids.
+ * With `abort` set to one of ABORT_CODES, `execute` is never called: completed steps
+ * stay `skipped`, pending steps are `not_reached`, the status is `aborted`, and the
+ * result carries `abortCode`. An unknown code, or `abort` with `dryRun: true`, throws
+ * before any step runs. An abort accepts an omitted `execute`.
  */
-export async function resumeSteps({ steps, completed = [], execute, dryRun = false }) {
+export async function resumeSteps({ steps, completed = [], execute, dryRun = false, abort }) {
   const ids = checkPlan(steps);
   if (typeof dryRun !== 'boolean') throw new ResumeError('dryRun must be a boolean.');
-  if (!dryRun && typeof execute !== 'function') throw new ResumeError('A resume needs an execute function.');
+  const aborting = abort !== undefined;
+  if (aborting && !ABORT_CODES.includes(abort)) {
+    throw new ResumeError(`abort must be one of ${ABORT_CODES.join(', ')}.`);
+  }
+  if (aborting && dryRun) throw new ResumeError('abort and dryRun cannot be combined: a dry run is not an abort.');
+  if (!dryRun && !aborting && typeof execute !== 'function') throw new ResumeError('A resume needs an execute function.');
   if (!Array.isArray(completed)) throw new ResumeError('completed must be an array of step ids.');
   for (const id of completed) {
     if (!ids.has(id)) throw new ResumeError(`Completed step "${id}" is not in this plan; start a new attempt from the current plan.`);
@@ -77,6 +97,10 @@ export async function resumeSteps({ steps, completed = [], execute, dryRun = fal
     }
     if (dryRun) {
       outcomes.push({ id: step.id, outcome: 'would_run', detail: 'pending step in a dry run' });
+      continue;
+    }
+    if (aborting) {
+      outcomes.push({ id: step.id, outcome: 'not_reached', detail: `the run was aborted (${abort})` });
       continue;
     }
     if (failed) {
@@ -114,9 +138,10 @@ export async function resumeSteps({ steps, completed = [], execute, dryRun = fal
     }
   }
   return {
-    status: dryRun ? 'dry_run' : failed ? 'failed' : 'complete',
+    status: dryRun ? 'dry_run' : aborting ? 'aborted' : failed ? 'failed' : 'complete',
     steps: outcomes,
     completed: steps.map(step => step.id).filter(id => done.has(id)),
+    ...(aborting ? { abortCode: abort } : {}),
   };
 }
 
