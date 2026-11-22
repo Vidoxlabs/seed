@@ -84,6 +84,16 @@ order and carries forward what a previous attempt finished:
    are `skipped` and pending steps are `would_run`. A dry run never calls `execute`,
    adds no completed ids, and returns the report in memory. The option accepts booleans.
 
+An executor can include `failureClass` on a failed result, and the failed step in
+the report carries that value. The field is optional. Accepted values are
+`policy-denied`, `gate-denied`, `tool-unknown`, `tool-not-canonical`, `schema-invalid`,
+`handler-error`, `external-exec-failed`, `external-unavailable`, and `external-incompatible`.
+Dry-run steps omit `failureClass`.
+
+A supplied value outside this list refuses the executor result, even when it claims
+`ok: true`. The report records a failed step with `code: 'invalid-failure-class'`,
+omits the invalid field, and retains the completed ids from before that failure.
+
 This is an in-process rule. Keeping `completed` across a process restart is the durable
 run store, stage 3.1, which stays `specified`.
 
@@ -106,6 +116,8 @@ Leases are records the caller keeps. Seed stores none of them.
 
 ## Changes
 
+- `0.6.0` adds optional failure classes to failed `resumeSteps` outcomes. Results
+  that omit `failureClass` keep their existing shape and behavior.
 - `0.5.0` — `resumeSteps` adds an opt-in dry run. Calls that omit `dryRun` keep their
   execution behavior and report shape.
 - `0.3.0` — resume and lease records are new exports (`src/resume.mjs`). Additive; no

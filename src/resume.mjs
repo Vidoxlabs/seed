@@ -8,6 +8,18 @@ import { randomUUID } from 'node:crypto';
 
 export const STEP_OUTCOMES = ['succeeded', 'failed', 'skipped', 'not_reached', 'would_run'];
 
+const FAILURE_CLASSES = [
+  'policy-denied',
+  'gate-denied',
+  'tool-unknown',
+  'tool-not-canonical',
+  'schema-invalid',
+  'handler-error',
+  'external-exec-failed',
+  'external-unavailable',
+  'external-incompatible',
+];
+
 export class ResumeError extends Error {}
 
 /** Raised when a live lease is already held. Carries the lease that blocked the claim. */
@@ -35,13 +47,15 @@ function checkPlan(steps) {
  *
  * - A step whose id is in `completed` is reported `skipped`, and `execute` is not called
  *   for it. Its effect does not run twice.
- * - `execute(step)` returns `{ ok, detail? }`. A throw counts as a failure.
+ * - `execute(step)` returns `{ ok, detail?, failureClass? }`. A throw counts as a failure.
+ *   An unknown failure class refuses the result with code `invalid-failure-class`.
  * - The first failed step stops the run. Every later step is `not_reached`.
  * - A `completed` id that is not in the plan is refused: the plan changed, so the record
  *   of what was done no longer describes it.
  *
- * Returns `{ status, steps, completed }`. `steps` holds one `{ id, outcome, detail }`
- * per step in plan order, and `completed` lists the done ids in plan order.
+ * Returns `{ status, steps, completed }`. Each step records `{ id, outcome, detail }`.
+ * A failed step can carry its supplied `failureClass` or a refusal code. Both `steps`
+ * and `completed` are in plan order.
  * With `dryRun: true`, the status is `dry_run` and pending steps are `would_run`.
  * A dry run accepts an omitted `execute` and records only previously completed ids.
  */
@@ -75,12 +89,28 @@ export async function resumeSteps({ steps, completed = [], execute, dryRun = fal
     } catch (error) {
       result = { ok: false, detail: error instanceof Error ? error.message : String(error) };
     }
+    const failureClass = result?.failureClass;
+    if (failureClass !== undefined && !FAILURE_CLASSES.includes(failureClass)) {
+      failed = true;
+      outcomes.push({
+        id: step.id,
+        outcome: 'failed',
+        detail: 'The executor reported an invalid failure class.',
+        code: 'invalid-failure-class',
+      });
+      continue;
+    }
     if (result?.ok === true) {
       done.add(step.id);
       outcomes.push({ id: step.id, outcome: 'succeeded', detail: typeof result.detail === 'string' ? result.detail : '' });
     } else {
       failed = true;
-      outcomes.push({ id: step.id, outcome: 'failed', detail: typeof result?.detail === 'string' ? result.detail : 'step reported failure' });
+      outcomes.push({
+        id: step.id,
+        outcome: 'failed',
+        detail: typeof result?.detail === 'string' ? result.detail : 'step reported failure',
+        ...(failureClass === undefined ? {} : { failureClass }),
+      });
     }
   }
   return {

@@ -80,6 +80,51 @@ test('a resume refuses a completed id the plan does not hold, and a malformed pl
   await assert.rejects(resumeSteps({ steps: plan }), ResumeError);
 });
 
+test('a failed step carries a supplied failure class from the closed vocabulary', async () => {
+  const classes = [
+    'policy-denied', 'gate-denied', 'tool-unknown', 'tool-not-canonical', 'schema-invalid',
+    'handler-error', 'external-exec-failed', 'external-unavailable', 'external-incompatible',
+  ];
+  for (const failureClass of classes) {
+    const { execute } = recorder({ apply: { ok: false, detail: 'apply failed', failureClass } });
+    const run = await resumeSteps({ steps: plan, execute });
+    assert.equal(run.status, 'failed');
+    assert.deepEqual(run.completed, ['prepare']);
+    assert.deepEqual(run.steps[1], { id: 'apply', outcome: 'failed', detail: 'apply failed', failureClass });
+  }
+});
+
+test('omitting the failure class preserves the failed step shape', async () => {
+  const { execute } = recorder({ apply: { ok: false, detail: 'apply failed' } });
+  const run = await resumeSteps({ steps: plan, execute });
+  assert.deepEqual(run.steps[1], { id: 'apply', outcome: 'failed', detail: 'apply failed' });
+});
+
+test('an invalid failure class refuses the result and keeps earlier completed steps', async () => {
+  const invalidResults = [
+    { ok: false, failureClass: 'unrecognized' },
+    { ok: true, failureClass: 'unrecognized' },
+    { ok: false, failureClass: null },
+  ];
+  for (const result of invalidResults) {
+    const { calls, execute } = recorder({ apply: result });
+    const run = await resumeSteps({ steps: plan, execute });
+    assert.equal(run.status, 'failed');
+    assert.deepEqual(run.completed, ['prepare']);
+    assert.deepEqual(calls, ['prepare', 'apply']);
+    assert.deepEqual(run.steps.map(step => step.outcome), ['succeeded', 'failed', 'not_reached']);
+    assert.equal(run.steps[1].code, 'invalid-failure-class');
+    assert.equal(Object.hasOwn(run.steps[1], 'failureClass'), false);
+  }
+});
+
+test('a dry run reports no failure class', async () => {
+  const { calls, execute } = recorder({ apply: { ok: false, failureClass: 'policy-denied' } });
+  const preview = await resumeSteps({ steps: plan, completed: ['prepare'], execute, dryRun: true });
+  assert.deepEqual(calls, []);
+  assert.equal(preview.steps.some(step => Object.hasOwn(step, 'failureClass')), false);
+});
+
 const T0 = Date.parse('2026-01-01T00:00:00.000Z');
 
 test('a lease has a holder and an expiry', () => {
