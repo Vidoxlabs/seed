@@ -27,9 +27,9 @@ capability that is not `implemented` or `observed` is a defect.
   numbers, container names, cluster names, or network topologies in any committed file.
 - No binary assets (see videsign's ADR-002 precedent); reference assets by a placeholder
   the consuming product resolves.
-- No invented product names. Use the generalized terms in `docs/lexicon.md` for concepts;
-  product proper nouns (seed, bloom, videsign, drosera) only where a public repository
-  backs them.
+- No invented product names. Use the generalized terms in `docs/lexicon.md` for concepts.
+  The product names a repository backs are `seed`, `capillary`, `myosotis`, `aestivation`,
+  `drosera`, `trellis`, `bloom`, and `videsign`.
 - Dependencies: none at runtime. A dependency proposal is an architecture decision first.
 
 ## Verification cycle
@@ -45,3 +45,58 @@ contract modules and tests in the same commit.
 
 Sentence-case subject lines, imperative mood, one concern per commit. Reference the
 contract or document that owns the behavior being changed.
+
+## Stay in this province
+
+This repository is the harness foundation: run records, tool identity, and provider-shape checks. It is the floor. Capillary, myosotis, aestivation, and drosera are peers beside each other, not steps above this package. Bloom is the only composer and does not import this package. Trellis is outside the call path. This task does not edit them.
+
+Do not add a listener, a memory store, a retrieval corpus, a roster of specialists, or a connector. A stage named in `docs/roadmap.md` as `specified` or `planned` is not code to invent in passing.
+
+## One change, one repository
+
+A change here is finished when this repository's tests pass. Do not open bloom, drosera, or trellis in the same task to keep them in step.
+
+The compatible surface is the exports and the tests. A repository that does not import this package cannot break because this package changed. Bloom does not import it. Capillary, myosotis, and aestivation do not import it.
+
+Drosera keeps a local copy of the tool grammar. That copy can lag. The lag is debt, paid later in drosera, not depth you must finish now. Name the lag in the change note. Do not edit drosera.
+
+A breaking change to an export or to the grammar bumps the major version in `package.json` and says so in the contract that changed. Do not tag, publish, or edit a consumer from this task.
+
+## Where the other six live
+
+| The work | Repository |
+| --- | --- |
+| Run records, tool identity, provider shape | `seed` (here) |
+| Bounded retrieval and relations | `capillary` |
+| Consent, forget, and recall | `myosotis` |
+| Plans, verdicts, and the assembly gate | `aestivation` |
+| Tool faces, skills, hooks, cookbooks | `drosera` |
+| Probes over those libraries | `trellis` |
+| The team workspace a person opens | `bloom` |
+
+`videsign` remains the design canon. It is not one of these seven.
+
+## Skills
+
+This file is the working method. A skill adds instructions and grants nothing: no tool, no domain, and no gate. Do not add a second skill system in this repository. A packaged copy, when one is needed, is a drosera skill record. It still grants nothing.
+
+## Agents
+
+One working method lives here. Do not add a roster of agents, and do not edit a sibling repository from this checkout. Specialists are the workspace's job.
+
+## References
+
+Read in this order: `docs/charter.md`, `docs/architecture.md`, `docs/contracts/`, `docs/lexicon.md`, then `src/`. If a contract and the code disagree, the code plus `npm test` win, and the contract is corrected in the same change.
+
+## Cookbook
+
+1. Read the charter and this file.
+2. Run `npm test`.
+3. Change a contract only together with the module and the test that hold it.
+4. Stop at the province boundary in the table above.
+
+This recipe is instructions. It is not an executable cookbook, because this repository ships no tool pack and no connector.
+
+## MCP
+
+This repository is not an MCP server. Do not commit an MCP configuration, a server address, or a credential. A call that leaves this repository is a drosera face whose identifier passes the tool grammar here. This repository does not ship that face's connector.

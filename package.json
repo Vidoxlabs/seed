@@ -1,7 +1,7 @@
 {
   "name": "@vidoxlabs/seed",
   "version": "0.2.0",
-  "description": "A local-first agent harness foundation: run contracts, tool identity, and provider adapters that work with Bloom",
+  "description": "Harness foundation for agent workspaces: run contracts, tool identity, provider adapters.",
   "type": "module",
   "license": "MIT",
   "engines": {

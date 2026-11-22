@@ -7,9 +7,9 @@ naming only and describes no infrastructure.
 
 Public repositories speak two kinds of names, and only two:
 
-1. **Proper nouns** of things a public repository backs today — `seed`, `bloom`,
-   `videsign`, and the successor proper nouns named in the mapping below (`capillary`,
-   `myosotis`, `aestivation`, `drosera`). Use them when referring to the product.
+1. **Proper nouns** of things a public repository backs today — `seed`, `capillary`,
+   `myosotis`, `aestivation`, `drosera`, `trellis`, `bloom`, and `videsign`. Use them
+   when referring to the product.
 2. **Generalized role terms** for everything else — concepts, roles, contracts, planes.
 
 Everything else — internal abbreviations, coined prefixes, brand-sounding concept names,
@@ -63,9 +63,12 @@ Notes on the odd ones out:
 ## Family naming: the botanic line
 
 The public-product family takes its names from botany (ratified by the owner,
-2026-11-23): `seed` (the harness foundation) → `capillary` (context retrieval) →
-`myosotis` (memory: consent, keep, forget) → `aestivation` (admission and review before
-assembly) → `bloom` (the opened team workspace). The line mirrors the house canon —
+2026-11-23). The names are a stack, not a call chain. `seed` is the contract floor:
+run records, tool identity, and the provider-shape checker. `capillary`, `myosotis`,
+`aestivation`, and `drosera` are peers. They do not import each other. `bloom` is the
+only composer and does not import them yet. `trellis` probes from outside the stack
+and does not patch a library. `drosera` is external faces, skills, hooks, and
+cookbooks, not seed's harness tooling. The stack mirrors the house canon —
 Violet, Wisteria, Xylia, Yarrow, and Zinnia are all flowering plants — but products are
 named for their function, never for a character. Each family name is an ordinary
 botanical word that says what its system does, per
