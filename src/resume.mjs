@@ -6,7 +6,7 @@
 
 import { randomUUID } from 'node:crypto';
 
-export const STEP_OUTCOMES = ['succeeded', 'failed', 'skipped', 'not_reached'];
+export const STEP_OUTCOMES = ['succeeded', 'failed', 'skipped', 'not_reached', 'would_run'];
 
 export class ResumeError extends Error {}
 
@@ -40,13 +40,15 @@ function checkPlan(steps) {
  * - A `completed` id that is not in the plan is refused: the plan changed, so the record
  *   of what was done no longer describes it.
  *
- * Returns `{ status, steps, completed }`: `status` is `complete` or `failed`, `steps` holds
- * one `{ id, outcome, detail }` per step in plan order, and `completed` is every step id
- * now done, in plan order, for the next attempt to carry.
+ * Returns `{ status, steps, completed }`. `steps` holds one `{ id, outcome, detail }`
+ * per step in plan order, and `completed` lists the done ids in plan order.
+ * With `dryRun: true`, the status is `dry_run` and pending steps are `would_run`.
+ * A dry run accepts an omitted `execute` and records only previously completed ids.
  */
-export async function resumeSteps({ steps, completed = [], execute }) {
+export async function resumeSteps({ steps, completed = [], execute, dryRun = false }) {
   const ids = checkPlan(steps);
-  if (typeof execute !== 'function') throw new ResumeError('A resume needs an execute function.');
+  if (typeof dryRun !== 'boolean') throw new ResumeError('dryRun must be a boolean.');
+  if (!dryRun && typeof execute !== 'function') throw new ResumeError('A resume needs an execute function.');
   if (!Array.isArray(completed)) throw new ResumeError('completed must be an array of step ids.');
   for (const id of completed) {
     if (!ids.has(id)) throw new ResumeError(`Completed step "${id}" is not in this plan; start a new attempt from the current plan.`);
@@ -57,6 +59,10 @@ export async function resumeSteps({ steps, completed = [], execute }) {
   for (const step of steps) {
     if (done.has(step.id)) {
       outcomes.push({ id: step.id, outcome: 'skipped', detail: 'completed in a previous attempt' });
+      continue;
+    }
+    if (dryRun) {
+      outcomes.push({ id: step.id, outcome: 'would_run', detail: 'pending step in a dry run' });
       continue;
     }
     if (failed) {
@@ -78,7 +84,7 @@ export async function resumeSteps({ steps, completed = [], execute }) {
     }
   }
   return {
-    status: failed ? 'failed' : 'complete',
+    status: dryRun ? 'dry_run' : failed ? 'failed' : 'complete',
     steps: outcomes,
     completed: steps.map(step => step.id).filter(id => done.has(id)),
   };

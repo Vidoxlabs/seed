@@ -27,6 +27,25 @@ test('a resume skips a step a previous attempt completed', async () => {
   assert.deepEqual(run.completed, ['prepare', 'apply', 'verify']);
 });
 
+test('a dry run reports skipped and pending steps without executing or completing them', async () => {
+  const { calls, execute } = recorder({ apply: new Error('should not run') });
+  const completed = Object.freeze(['prepare']);
+  const preview = await resumeSteps({ steps: plan, completed, execute, dryRun: true });
+  assert.deepEqual(calls, []);
+  assert.equal(preview.status, 'dry_run');
+  assert.deepEqual(preview.steps.map(({ id, outcome }) => [id, outcome]), [
+    ['prepare', 'skipped'], ['apply', 'would_run'], ['verify', 'would_run'],
+  ]);
+  assert.deepEqual(preview.completed, ['prepare']);
+  assert.deepEqual(await resumeSteps({ steps: plan, completed, dryRun: true }), preview);
+});
+
+test('a malformed dry-run option is refused before any step executes', async () => {
+  const { calls, execute } = recorder();
+  await assert.rejects(resumeSteps({ steps: plan, execute, dryRun: 'true' }), ResumeError);
+  assert.deepEqual(calls, []);
+});
+
 test('a resume stops after a failed step', async () => {
   const { calls, execute } = recorder({ apply: { ok: false, detail: 'apply refused' } });
   const run = await resumeSteps({ steps: plan, execute });

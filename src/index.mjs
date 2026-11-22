@@ -1,6 +1,6 @@
 /** Seed contract modules. The harness runtime is staged; these contracts are the floor. */
 
-export const VERSION = '0.4.0';
+export const VERSION = '0.5.0';
 
 export * from './tool-id.mjs';
 export * from './provider.mjs';
@@ -17,7 +17,7 @@ Contracts (implemented):
   tool-id    parseToolId, formatToolId, isValidToolId, isWellFormedRegistryEntry,
              checkRegistry, rollbackPosture, ROLLBACK_POSTURES
   run-model  createObjective, transition, createAttemptRecord, recordIntent, attachReceipt
-  resume     resumeSteps, claimLease, releaseLease, isLeaseLive (in-process, not durable)
+  resume     resumeSteps (including dry run), claimLease, releaseLease, isLeaseLive
   admission  admitCaller, ADMISSION_DENIALS
   provider   validateProvider, normalizeGeneration
   models     modelAlias, modelAliasTable, resolveModel (a table the caller holds)
