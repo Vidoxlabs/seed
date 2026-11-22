@@ -41,6 +41,34 @@ returning
 5. **One provider process, one responsibility.** A provider never mutates run state,
    memory, or artifacts; those facts belong to the run engine and the stores.
 
+## Model names
+
+`implemented` in `src/model-alias.mjs`. A caller asks for a model by **alias**. An alias
+table, held by the caller, maps each alias to a **backend model** name:
+
+```
+modelAlias({ alias, backendModel, workload, deprecated?, replacedBy? })
+modelAliasTable([alias records])
+resolveModel(table, requested)
+  → { resolved: true, requested, backendModel, deprecated, replacedBy }
+  | { resolved: false, requested, reason: 'unknown-alias' }
+```
+
+1. **The two names stay distinct.** An alias is lowercase words joined by hyphens, with
+   no wildcard. A record whose alias equals its backend model name is refused. The result
+   carries both `requested` and `backendModel`.
+2. **Only an alias resolves.** A backend model name that no alias names is
+   `unknown-alias`, and nothing is chosen in its place (rule 2 above).
+3. **Deprecated is a label, not a swap.** A deprecated alias resolves to its own backend
+   model with `deprecated: true`. It may name `replacedBy`, which the table checks is a
+   registered alias that is not itself deprecated. Resolution never follows it; the
+   caller decides.
+4. **The table is local.** Resolution reads only the table it is given. It makes no
+   network call and asks no backend which models exist. No seed module opens a listener
+   or calls the network, and a test reads every module in `src/` to hold that.
+
+Serving these names over a local endpoint is stage 2, and stays `specified`.
+
 ## The OpenAI-compatible tier
 
 Hosted and local services that already speak the chat-completions HTTP surface
@@ -52,3 +80,9 @@ inside seed, so workspaces point at one local address while backends remain swap
 `src/provider.mjs` implements `validateProvider` (checks a candidate adapter against the
 seam) and `normalizeGeneration` (accepts a raw provider result and either returns a
 conforming record or names every contract violation).
+
+## Changes
+
+- `0.4.0` — model names (`modelAlias`, `modelAliasTable`, `resolveModel`,
+  `ModelAliasError`) are new exports in `src/model-alias.mjs`. Additive; no existing
+  export changed. Stage 2 stays `specified`.

@@ -1,6 +1,6 @@
 {
   "name": "@vidoxlabs/seed",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Harness foundation for agent workspaces: run contracts, tool identity, provider adapters.",
   "type": "module",
   "license": "MIT",
