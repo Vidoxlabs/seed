@@ -8,7 +8,8 @@ naming only and describes no infrastructure.
 Public repositories speak two kinds of names, and only two:
 
 1. **Proper nouns** of things a public repository backs today — `seed`, `bloom`,
-   `videsign`, `vitools`. Use them when referring to the product.
+   `videsign`, and the successor proper nouns named in the mapping below (`capillary`,
+   `myosotis`, `aestivation`, `drosera`). Use them when referring to the product.
 2. **Generalized role terms** for everything else — concepts, roles, contracts, planes.
 
 Everything else — internal abbreviations, coined prefixes, brand-sounding concept names,
@@ -36,7 +37,7 @@ role terms on the right. The internal column is naming only.
 | ViPerScale | step admission and scaling | Planning which worker, timeout, and context a chain step gets |
 | ViDocs | the documentation base | The governed knowledge base |
 | ViDesign | (proper noun) `videsign` | The shared design system |
-| ViTools | (proper noun) `vitools` | The public skills/agents/tools registry |
+| ViTools | (proper noun) `drosera` for the public successor, otherwise the tooling fabric | Tool faces, skills, hooks, cookbooks |
 | V37 / the cluster | the local cluster | Private infrastructure; never described beyond that |
 | Memorix | (proper noun) `myosotis` for the public successor, otherwise the memory fabric | Governed memory with consent and forget |
 | Tri-Cluster | the storage triangle | Record authority, cache projection, graph projection |

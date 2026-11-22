@@ -28,7 +28,7 @@ capability that is not `implemented` or `observed` is a defect.
 - No binary assets (see videsign's ADR-002 precedent); reference assets by a placeholder
   the consuming product resolves.
 - No invented product names. Use the generalized terms in `docs/lexicon.md` for concepts;
-  product proper nouns (seed, bloom, videsign, vitools) only where a public repository
+  product proper nouns (seed, bloom, videsign, drosera) only where a public repository
   backs them.
 - Dependencies: none at runtime. A dependency proposal is an architecture decision first.
 
