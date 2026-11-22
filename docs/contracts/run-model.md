@@ -68,8 +68,43 @@ Legal transitions:
    admission list admits nothing, and `createAttemptRecord` refuses an objective whose
    admission list is empty or malformed.
 
+## Resume
+
+`resumeSteps({ steps, completed, execute })` in `src/resume.mjs` runs a list of steps in
+order and carries forward what a previous attempt finished:
+
+1. A step whose id is in `completed` is reported `skipped`. `execute` is not called for
+   it, so its effect does not run twice.
+2. The first failed step stops the run. A throw counts as a failure, and a result
+   without `ok: true` is not a success. Every later step is `not_reached`.
+3. A `completed` id that the plan does not hold is refused with `ResumeError`. The plan
+   changed, so the old record of what was done does not describe it.
+4. The result returns `completed` in plan order, for the next attempt to carry.
+
+This is an in-process rule. Keeping `completed` across a process restart is the durable
+run store, stage 3.1, which stays `specified`.
+
+## Lease
+
+A lease says which runner may drive an attempt, and until when:
+`{ leaseId, holder, acquiredAt, expiresAt }`, with ISO timestamps.
+
+1. `claimLease(current, { holder, ttlMs, now })` refuses with `LeaseHeldError` while
+   `current` is live. That includes a claim that gives the same holder name. A name is not
+   proof of being the same runner.
+2. An expired lease may be replaced. Expiry is exclusive: at `expiresAt` the lease is no
+   longer live.
+3. A malformed lease on record is refused, not broken. It cannot show it has expired, so
+   it is cleared by hand.
+4. `releaseLease(current, lease)` clears the record only when `lease` is the one held. A
+   stale holder cannot release its successor's lease.
+
+Leases are records the caller keeps. Seed stores none of them.
+
 ## Changes
 
+- `0.3.0` — resume and lease records are new exports (`src/resume.mjs`). Additive; no
+  existing export changed.
 - `0.2.0` — rule 6 is new in code. Before `0.2.0` the contract said "not on the list,
   not callable" but `recordIntent` did not check the list, so a caller could record an
   intent for an unadmitted tool. That call now throws `RunModelError`. This is a

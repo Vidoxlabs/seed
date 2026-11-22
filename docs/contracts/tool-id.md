@@ -85,6 +85,29 @@ each `toolId` is registered once, and every `compensatingTool` is itself a regis
 has none. This is validation over a list the caller holds. The registry service that
 publishes and serves entries is stage 3.2 and stays `specified`.
 
+## Caller admission
+
+`admitCaller(registry, { callerId, command })` in `src/admission.mjs` decides whether a
+caller may run a command, over a registry the caller holds:
+
+```
+{ callers:  [{ id, enabled, allowedTools: [toolId, ...] }],
+  commands: [{ command: [segment, ...], toolId }] }
+```
+
+It fails closed. Each denial returns `{ admitted: false, code, reason }`:
+
+| `code` | When |
+| --- | --- |
+| `registry-unavailable` | no registry, a registry without both lists, a caller entry without an id, or a caller id registered twice |
+| `caller-unknown` | the call has no caller id, or the id is not registered |
+| `caller-disabled` | the caller is not `enabled: true` (a missing flag is not a yes) |
+| `command-unmapped` | no entry matches every segment of the command, or the entry's `toolId` is not well formed |
+| `tool-not-allowed` | the mapped tool is not on the caller's `allowedTools` |
+
+An admitted call returns `{ admitted: true, callerId, toolId }`. Decisions are frozen.
+This is a check over a list, not the registry service of stage 3.2.
+
 ## Reading classes
 
 - `read`-effect tools run inside the attempt's admitted scopes by default.

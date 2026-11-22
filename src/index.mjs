@@ -1,10 +1,12 @@
 /** Seed contract modules. The harness runtime is staged; these contracts are the floor. */
 
-export const VERSION = '0.2.0';
+export const VERSION = '0.3.0';
 
 export * from './tool-id.mjs';
 export * from './provider.mjs';
 export * from './run-model.mjs';
+export * from './resume.mjs';
+export * from './admission.mjs';
 
 /** Print the contract surface and claim labels for a quick human read. */
 const about = () => `
@@ -14,6 +16,8 @@ Contracts (implemented):
   tool-id    parseToolId, formatToolId, isValidToolId, isWellFormedRegistryEntry,
              checkRegistry, rollbackPosture, ROLLBACK_POSTURES
   run-model  createObjective, transition, createAttemptRecord, recordIntent, attachReceipt
+  resume     resumeSteps, claimLease, releaseLease, isLeaseLive (in-process, not durable)
+  admission  admitCaller, ADMISSION_DENIALS
   provider   validateProvider, normalizeGeneration
 
 Runtime services (specified, not shipped): local inference endpoint (stage 2),
