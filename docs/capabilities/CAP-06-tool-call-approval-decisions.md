@@ -95,9 +95,9 @@ None defined by this capability.
 
 ## Open owner decisions
 
-- **D14 (`CAP-06.1` at `M3` with `CAP-07.3` folded in, pending owner ruling)**: Under review convention `A2` / `D14`, `CAP-06.1` ships at `M3` (covering plan-digest binding folded from `CAP-07.3`, so `CAP-07` depends on `CAP-06.1`), while `CAP-06.2` through `CAP-06.4` ship at `M4` (`P4`). Kept unless overridden by the owner.
+- **D14 (`CAP-06.1` at `M3` with `CAP-07.3` folded in, pending owner ruling)**: Under review convention `D14`, `CAP-06.1` ships at `M3` (covering plan-digest binding folded from `CAP-07.3`, so `CAP-07` depends on `CAP-06.1`), while `CAP-06.2` through `CAP-06.4` ship at `M4` (`P4`). Kept unless overridden by the owner.
 - **D10 (secret-file deny list override, pending owner ruling)**: Under `CAP-05`, the secret-file deny list stays always on and symlinks are not followed by default; an explicit include of a denied path requires a per-call `CAP-06.1` owner approval record.
-- **D12 (`P4` terminal gate UX rulings, pending owner ruling)**: Pending owner rulings for `bloom` CLI `P4` approval prompts and terminal gate UX details (`CAP-06.4`).
+- **Terminal approval prompt UX for `CAP-06.4` (pending owner decision, not yet numbered)**: pending owner rulings for `bloom` CLI `P4` approval prompts and terminal gate UX details.
 
 ## Evidence
 
@@ -105,5 +105,6 @@ None yet. Capability is `proposed` with claim `planned`.
 
 ## Changes
 
-- `2026-11-23`: Moved `CAP-06.1` to `M3` with `CAP-07.3` plan-digest binding folded in (`CAP-07` depends on `CAP-06.1`), assigned `M4` to `CAP-06.2`..`CAP-06.4`, and aligned open owner decisions with `D10`, `D12`, and `D14`.
+- `2026-11-23`: Separated `CAP-06.4` terminal approval prompt UX into an unnumbered open owner question distinct from `D12` and removed the review-prompt label from `D14` (`CAP-01.2`).
+- `2026-11-23`: Moved `CAP-06.1` to `M3` with `CAP-07.3` plan-digest binding folded in (`CAP-07` depends on `CAP-06.1`), assigned `M4` to `CAP-06.2`..`CAP-06.4`, and aligned open owner decisions with `D10` and `D14`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).
