@@ -5,7 +5,7 @@
 - Lead: `seed`
 - Touches: `bloom`, `drosera`
 - Horizon: `next`
-- Milestone: `M4`
+- Milestone: `M3` (`CAP-06.1` ships at `M3`; `CAP-06.2` to `CAP-06.4` ship at `M4`)
 - CLI phase: `P4`
 - Status: `proposed`
 - Claim: `planned`
@@ -19,7 +19,7 @@
 
 `CAP-06` specifies the digest-bound owner-gate decision contract in `seed`, metadata alignment in `drosera`, and the interactive approval flow and trace events in `bloom`:
 
-1. **Owner-gate decision record**:
+1. **Owner-gate decision record (`CAP-06.1` at `M3`)**:
    ```
    { callId, toolId, argsDigest, decision, editedArgsDigest?, reason?, decidedAt }
    ```
@@ -30,8 +30,9 @@
    - `editedArgsDigest`: required 64-hex SHA-256 digest when `decision === "edit"`, refused on all other decision kinds.
    - `reason`: optional non-empty string explaining a rejection or holding the owner's reply text for `"respond"`.
    - `decidedAt`: ISO-8601 UTC timestamp string recording when the owner decided.
-2. **Effect and third-party egress allowances**:
-   - `read` tools with `thirdPartyEgress: false` run freely inside the attempt's admitted `allowedTools` and declared sandbox scopes without pausing (`ownerGate` false).
+   - **Plan-digest binding (folded from `CAP-07.3` into `CAP-06.1`)**: the owner-gate decision contract also supports plan approval records bound to a canonical 64-hex SHA-256 `planDigest` (`CAP-07` depends on `CAP-06.1`), failing closed whenever a plan edit alters `planDigest`.
+2. **Effect and third-party egress allowances (`CAP-06.1` at `M3`)**:
+   - `read` tools with `thirdPartyEgress: false` run freely inside the attempt's admitted `allowedTools` and declared sandbox scopes without pausing (`ownerGate` false), except where an explicit override of a denied secret path (`CAP-05`, pending `D10`) requires a per-call `CAP-06.1` owner approval record.
    - `write` tools allow all four decisions: `approve`, `edit`, `reject`, and `respond`.
    - `destructive` and `credential` tools allow `approve`, `edit`, and `reject`, and **disallow `respond`**: an owner reply cannot stand in for or spoof a destructive or credential action.
    - Any tool with `thirdPartyEgress: true` always pauses at the owner gate (`ownerGate: true`), even when its `effect` is `read`.
@@ -45,7 +46,7 @@
 
 ## Contract touchpoints
 
-- `seed`: `docs/contracts/run-model.md` (owner-gate decision record shape, deferred call kinds `approval`/`question`/`external`, fail-closed resume rule); `docs/contracts/tool-id.md` (effect and `thirdPartyEgress` decision allowances, mandatory `ownerGate` on third-party egress).
+- `seed`: `docs/contracts/run-model.md` (owner-gate decision record shape including call and plan-digest binding for `CAP-07`, deferred call kinds `approval`/`question`/`external`, fail-closed resume rule); `docs/contracts/tool-id.md` (effect and `thirdPartyEgress` decision allowances, mandatory `ownerGate` on third-party egress).
 - `drosera`: `docs/contracts/tools.md` (face metadata alignment for `ownerGate`, `effect`, and `thirdPartyEgress`).
 - `bloom`: `docs/architecture.md` (owner prompt/UI decision flow, `edit` re-validation and model notice, `respond` owner-input labeling, permission events).
 
@@ -67,7 +68,7 @@ None defined by this capability.
 
 ## Acceptance tests
 
-1. `digest-mismatch-voids-approval`: Changing `toolId` or `argsDigest` after an `approve` decision is recorded causes resume from `waiting_for_owner` to fail closed without running the tool.
+1. `digest-mismatch-voids-approval`: Changing `toolId`, `argsDigest`, or bound `planDigest` after an `approve` decision is recorded causes resume from `waiting_for_owner` or plan execution to fail closed without running the tool or plan.
 2. `destructive-and-credential-disallow-respond`: Submitting `decision: "respond"` for a `destructive` or `credential` tool is refused by validation, while `write` tools permit all four decision kinds.
 3. `third-party-egress-always-gates`: A `read` tool with `thirdPartyEgress: true` pauses at `waiting_for_owner` and requires an owner decision before execution.
 4. `edit-revalidates-and-informs-model`: An `edit` decision validates replacement arguments against `inputSchema`, verifies `editedArgsDigest`, records the updated intent, and informs the model that replacement arguments ran.
@@ -77,10 +78,10 @@ None defined by this capability.
 
 ## Slices
 
-- `CAP-06.1` (`seed`, status `proposed`): Define owner-gate decision record validation, digest binding, and effect/egress decision allowances in `seed`.
-- `CAP-06.2` (`seed`, status `proposed`): Define deferred call states (`approval`, `question`, `external`) and fail-closed `waiting_for_owner` resume checks in `seed`.
-- `CAP-06.3` (`drosera`, status `proposed`): Align `drosera` face metadata checks with `ownerGate`, `effect`, and `thirdPartyEgress` rules.
-- `CAP-06.4` (`bloom`, status `proposed`): Implement approval CLI/UI flow, `edit` re-validation and model disclosure, `respond` owner-input labeling, and `permission.requested` / `permission.resolved` events.
+- `CAP-06.1` (`seed`, milestone `M3`, status `proposed`): Define owner-gate decision record validation, plan-digest binding (folded from `CAP-07.3`, so `CAP-07` depends on `CAP-06.1`), call-digest binding, and effect/egress decision allowances in `seed`.
+- `CAP-06.2` (`seed`, milestone `M4`, status `proposed`): Define deferred call states (`approval`, `question`, `external`) and fail-closed `waiting_for_owner` resume checks in `seed`.
+- `CAP-06.3` (`drosera`, milestone `M4`, status `proposed`): Align `drosera` face metadata checks with `ownerGate`, `effect`, and `thirdPartyEgress` rules.
+- `CAP-06.4` (`bloom`, milestone `M4`, status `proposed`): Implement approval CLI/UI flow, `edit` re-validation and model disclosure, `respond` owner-input labeling, and `permission.requested` / `permission.resolved` events.
 
 ## Non-goals
 
@@ -90,11 +91,13 @@ None defined by this capability.
 ## Family rules and conflicts
 
 - **Owner is the only gate authority**: Neither `aestivation` review verdicts nor `myosotis` memory entries can ratify or bypass an owner gate (`CAP-07` cross-check).
-- **Receipts over self-report**: Approval applies only to the exact `argsDigest` presented; edited arguments re-enter schema validation and intent recording before effect execution.
+- **Receipts over self-report**: Approval applies only to the exact `argsDigest` or `planDigest` presented; edited arguments or edited plans re-enter schema validation and intent or gate recording before execution.
 
 ## Open owner decisions
 
-- **D12 and M3/M4 sequencing with CAP-07**: `CAP-07` (Plan review and approval loop, assigned to `M3` / `P3`) depends on `CAP-06` (currently assigned to `M4` / `P4`). Owner sequencing guidance is needed on whether `CAP-06` gate records land in `M3` ahead of the full `P4` approval UX or whether `CAP-07` sequences alongside `M4`. Also pending `D12` P2/P4 tool-ID and terminal gate UX rulings.
+- **D14 (`CAP-06.1` at `M3` with `CAP-07.3` folded in, pending owner ruling)**: Under review convention `A2` / `D14`, `CAP-06.1` ships at `M3` (covering plan-digest binding folded from `CAP-07.3`, so `CAP-07` depends on `CAP-06.1`), while `CAP-06.2` through `CAP-06.4` ship at `M4` (`P4`). Kept unless overridden by the owner.
+- **D10 (secret-file deny list override, pending owner ruling)**: Under `CAP-05`, the secret-file deny list stays always on and symlinks are not followed by default; an explicit include of a denied path requires a per-call `CAP-06.1` owner approval record.
+- **D12 (`P4` terminal gate UX rulings, pending owner ruling)**: Pending owner rulings for `bloom` CLI `P4` approval prompts and terminal gate UX details (`CAP-06.4`).
 
 ## Evidence
 
@@ -102,4 +105,5 @@ None yet. Capability is `proposed` with claim `planned`.
 
 ## Changes
 
+- `2026-11-23`: Moved `CAP-06.1` to `M3` with `CAP-07.3` plan-digest binding folded in (`CAP-07` depends on `CAP-06.1`), assigned `M4` to `CAP-06.2`..`CAP-06.4`, and aligned open owner decisions with `D10`, `D12`, and `D14`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).

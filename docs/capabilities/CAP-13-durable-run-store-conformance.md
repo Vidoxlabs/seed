@@ -68,9 +68,9 @@ None defined by this capability. Store persistence events and trace hooks belong
 
 ## Slices
 
-- `CAP-13.1` (`seed`, status `proposed`): Define durable run store interface, export declarative conformance cases + `runStoreConformance` runner, and ship the zero-DB in-memory reference store (`seed`).
-- `CAP-13.2` (`bloom`, status `proposed`): Implement SQLite durable run store in `bloom` passing the `seed` conformance suite (`bloom`).
-- `CAP-13.3` (`trellis`, status `proposed`): Add external behavior probes validating the `seed` reference store and conformance suite (`trellis`).
+- `CAP-13.1` (`seed`, milestone `M7`, status `proposed`): Define durable run store interface, export declarative conformance cases + `runStoreConformance` runner, and ship the zero-DB in-memory reference store (`seed`).
+- `CAP-13.2` (`bloom`, milestone `M7`, status `proposed`): Implement SQLite durable run store in `bloom` passing the `seed` conformance suite (`bloom`).
+- `CAP-13.3` (`trellis`, milestone `M7`, status `proposed`): Add external behavior probes validating the `seed` reference store and conformance suite (`trellis`).
 
 ## Non-goals
 
@@ -93,4 +93,5 @@ None yet. Capability is `proposed` with claim `planned`.
 
 ## Changes
 
+- `2026-11-23`: Added `M7` slice milestones across `CAP-13.1`..`CAP-13.3`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).

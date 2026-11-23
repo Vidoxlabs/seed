@@ -63,8 +63,8 @@ None defined by this capability. Policy denials emit typed events on `bloom`'s `
 
 ## Slices
 
-- `CAP-17.1` (`seed`, status `proposed`): Define per-run sandbox scope contract, pure virtual path map containment checks, and default-off shell policy in `seed`.
-- `CAP-17.2` (`bloom`, status `proposed`): Bind concrete workspace roots, enforce symlink-safe confinement, and check sandbox scopes on every tool dispatch in `bloom`.
+- `CAP-17.1` (`seed`, milestone `M9`, status `proposed`): Define per-run sandbox scope contract, pure virtual path map containment checks, and default-off shell policy in `seed`.
+- `CAP-17.2` (`bloom`, milestone `M9`, status `proposed`): Bind concrete workspace roots, enforce symlink-safe confinement, and check sandbox scopes on every tool dispatch in `bloom`.
 
 ## Non-goals
 
@@ -79,7 +79,7 @@ None defined by this capability. Policy denials emit typed events on `bloom`'s `
 
 ## Open owner decisions
 
-- **Multi-root syntax and read-only symlink exception rules**: Exact separator convention for `virtualPathMap` (`rootId` prefix vs structured `{ rootId, relativePath }` object) and whether read-only symlinks inside a single workspace root require explicit opt-in or stay universally blocked (settled when `M9` begins).
+- **Multi-root syntax and read-only symlink exception rules**: Exact separator convention for `virtualPathMap` (`rootId` prefix vs structured `{ rootId, relativePath }` object) and whether read-only symlinks inside a single workspace root ever allow explicit opt-in or stay universally blocked alongside default non-following of symlinks under `D10` (settled when `M9` begins).
 
 ## Evidence
 
@@ -87,4 +87,5 @@ None yet. Capability is `proposed` with claim `planned`.
 
 ## Changes
 
+- `2026-11-23`: Added `M9` slice milestones across `CAP-17.1`..`CAP-17.2` and referenced `D10` symlink default.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).

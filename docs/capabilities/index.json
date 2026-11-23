@@ -12,13 +12,16 @@
         {
           "id": "CAP-01.2",
           "title": "Seed capability docs and roadmap mapping",
+          "milestone": "M0",
           "status": "in-progress"
         }
       ],
       "toolIds": [],
       "contracts": [],
       "tests": [],
-      "prs": [],
+      "prs": [
+        "seed#1"
+      ],
       "commits": [],
       "adr": [],
       "decision": null,
@@ -34,6 +37,7 @@
         {
           "id": "CAP-02.2",
           "title": "Self-test test/capabilities.test.mjs in seed",
+          "milestone": "M2",
           "status": "proposed"
         }
       ],
@@ -56,6 +60,19 @@
         {
           "id": "CAP-03.1",
           "title": "Schema subset and validator in seed plus optional outputSchema",
+          "milestone": "M2",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-03.2",
+          "title": "Optional inputSchema and outputSchema on drosera tool faces with parity check",
+          "milestone": "M2",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-03.3",
+          "title": "Pre-dispatch input validation, single repair turn, and output validation in bloom",
+          "milestone": "M2",
           "status": "proposed"
         }
       ],
@@ -79,12 +96,26 @@
       "slices": [
         {
           "id": "CAP-06.1",
-          "title": "Owner-gate decision record and effect allowances",
+          "title": "Owner-gate decision record, plan and call digest binding, and effect/egress allowances",
+          "milestone": "M3",
           "status": "proposed"
         },
         {
           "id": "CAP-06.2",
           "title": "Deferred call pause and fail-closed resume",
+          "milestone": "M4",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-06.3",
+          "title": "Drosera face metadata alignment for owner-gate and egress flags",
+          "milestone": "M4",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-06.4",
+          "title": "Bloom approval UI/CLI flow, edit and respond handling, and permission events",
+          "milestone": "M4",
           "status": "proposed"
         }
       ],
@@ -106,13 +137,7 @@
       "status": "proposed",
       "claim": "planned",
       "spec": "aestivation/docs/capabilities/CAP-07-plan-review-approval-loop.md",
-      "slices": [
-        {
-          "id": "CAP-07.3",
-          "title": "Owner-gate record binding to plan digest",
-          "status": "proposed"
-        }
-      ],
+      "slices": [],
       "toolIds": [],
       "contracts": [
         "docs/contracts/run-model.md"
@@ -134,6 +159,7 @@
         {
           "id": "CAP-08.1",
           "title": "Declarative team document validation checks",
+          "milestone": "M3",
           "status": "proposed"
         }
       ],
@@ -158,6 +184,7 @@
         {
           "id": "CAP-09.2",
           "title": "Clarification pause and guard refusal codes",
+          "milestone": "M3",
           "status": "proposed"
         }
       ],
@@ -182,6 +209,7 @@
         {
           "id": "CAP-10.1",
           "title": "Correlation IDs on run trace records",
+          "milestone": "M4",
           "status": "proposed"
         }
       ],
@@ -206,11 +234,19 @@
         {
           "id": "CAP-12.1",
           "title": "Step graph state merge, routes, and retry policies",
+          "milestone": "M7",
           "status": "proposed"
         },
         {
           "id": "CAP-12.2",
           "title": "Checkpoints, parallel pending writes, fork, durability, and interrupts",
+          "milestone": "M7",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-12.3",
+          "title": "Runtime graph executor, checkpoint tools, and interrupt/fork wiring in bloom",
+          "milestone": "M7",
           "status": "proposed"
         }
       ],
@@ -239,6 +275,19 @@
         {
           "id": "CAP-13.1",
           "title": "Durable run store interface, conformance suite, and in-memory reference",
+          "milestone": "M7",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-13.2",
+          "title": "SQLite durable run store in bloom passing conformance suite",
+          "milestone": "M7",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-13.3",
+          "title": "Store conformance probes in trellis",
+          "milestone": "M7",
           "status": "proposed"
         }
       ],
@@ -263,6 +312,7 @@
         {
           "id": "CAP-14.1",
           "title": "Scripted and function model test doubles",
+          "milestone": "M5",
           "status": "proposed"
         }
       ],
@@ -287,6 +337,19 @@
         {
           "id": "CAP-16.1",
           "title": "Recorded provider conformance fixtures and model profile contract",
+          "milestone": "M4",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-16.2",
+          "title": "Provider conformance behavior probes in trellis",
+          "milestone": "M4",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-16.3",
+          "title": "Doctor probe model profile and profile-driven prompts and budgets in bloom",
+          "milestone": "M4",
           "status": "proposed"
         }
       ],
@@ -311,6 +374,13 @@
         {
           "id": "CAP-17.1",
           "title": "Per-run sandbox scope contract and default-off shell policy",
+          "milestone": "M9",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-17.2",
+          "title": "Workspace root enforcement and effect scope checks in bloom",
+          "milestone": "M9",
           "status": "proposed"
         }
       ],

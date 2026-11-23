@@ -75,9 +75,9 @@ None defined in `seed`. Step graph lifecycle and checkpoint events emitted by `b
 
 ## Slices
 
-- `CAP-12.1` (`seed`, status `proposed`): Step graph schema, pre-run route/reducer validation, per-key state merge (`replace`, `append`, named reducer), and failure-class retry policies (`seed`).
-- `CAP-12.2` (`seed`, status `proposed`): Post-step checkpoint records with `parentCheckpointId` and `stateDigest`, parallel `completedWrites`, fork, per-run durability modes, and interrupt pause/resume (`seed`).
-- `CAP-12.3` (`bloom`, status `proposed`): Runtime graph executor, `run.checkpoint.read` / `run.checkpoint.create` / `run.step.cancel` handlers, and interrupt/fork CLI/UI wiring (`bloom`).
+- `CAP-12.1` (`seed`, milestone `M7`, status `proposed`): Step graph schema, pre-run route/reducer validation, per-key state merge (`replace`, `append`, named reducer), and failure-class retry policies (`seed`).
+- `CAP-12.2` (`seed`, milestone `M7`, status `proposed`): Post-step checkpoint records with `parentCheckpointId` and `stateDigest`, parallel `completedWrites`, fork, per-run durability modes, and interrupt pause/resume (`seed`).
+- `CAP-12.3` (`bloom`, milestone `M7`, status `proposed`): Runtime graph executor, `run.checkpoint.read` / `run.checkpoint.create` / `run.step.cancel` handlers, and interrupt/fork CLI/UI wiring (`bloom`).
 
 ## Non-goals
 
@@ -99,4 +99,5 @@ None yet. Capability is `proposed` with claim `planned`.
 
 ## Changes
 
+- `2026-11-23`: Added `M7` slice milestones across `CAP-12.1`..`CAP-12.3`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).

@@ -67,9 +67,9 @@ None defined by this capability. Probe diagnostic output and runtime trace event
 
 ## Slices
 
-- `CAP-16.1` (`seed`, status `proposed`): Ship recorded offline provider conformance fixtures (including malformed, truncated, slow-stream) and the model profile contract/validator in `seed`.
-- `CAP-16.2` (`trellis`, status `proposed`): Implement provider conformance behavior probes over injected test adapters (`trellis`).
-- `CAP-16.3` (`bloom`, status `proposed`): Implement `bloom doctor --probe` model profile detection and profile-driven prompt style, budget, and constrained output wiring (`bloom`).
+- `CAP-16.1` (`seed`, milestone `M4`, status `proposed`): Ship recorded offline provider conformance fixtures (including malformed, truncated, slow-stream) and the model profile contract/validator in `seed`.
+- `CAP-16.2` (`trellis`, milestone `M4`, status `proposed`): Implement provider conformance behavior probes over injected test adapters (`trellis`).
+- `CAP-16.3` (`bloom`, milestone `M4`, status `proposed`): Implement `bloom doctor --probe` model profile detection and profile-driven prompt style, budget, and constrained output wiring (`bloom`).
 
 ## Non-goals
 
@@ -92,4 +92,5 @@ None yet. Capability is `proposed` with claim `planned`.
 
 ## Changes
 
+- `2026-11-23`: Added `M4` slice milestones across `CAP-16.1`..`CAP-16.3`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).

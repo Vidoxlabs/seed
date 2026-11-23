@@ -70,9 +70,9 @@ None defined by this capability. Validation and repair events in the team trace 
 
 ## Slices
 
-- `CAP-03.1` (`seed`, status `proposed`): Implement the closed schema subset (`checkSchema`, `validateValue`) in `seed` and add optional `outputSchema` to registry entries (`docs/contracts/tool-id.md`, additive minor bump).
-- `CAP-03.2` (`drosera`, status `proposed`): Add optional `inputSchema` and `outputSchema` validation on tool faces with parity verification against `seed`.
-- `CAP-03.3` (`bloom`, status `proposed`): Wire pre-dispatch `inputSchema` checking, one repair turn then `malformed`, and `outputSchema` validation sharing the repair budget.
+- `CAP-03.1` (`seed`, milestone `M2`, status `proposed`): Implement the closed schema subset (`checkSchema`, `validateValue`) in `seed` and add optional `outputSchema` to registry entries (`docs/contracts/tool-id.md`, additive minor bump).
+- `CAP-03.2` (`drosera`, milestone `M2`, status `proposed`): Add optional `inputSchema` and `outputSchema` validation on tool faces with parity verification against `seed`.
+- `CAP-03.3` (`bloom`, milestone `M2`, status `proposed`): Wire pre-dispatch `inputSchema` checking, one repair turn then `malformed`, and `outputSchema` validation sharing the repair budget.
 
 ## Non-goals
 
@@ -88,7 +88,7 @@ None defined by this capability. Validation and repair events in the team trace 
 
 ## Open owner decisions
 
-- **D4 (drosera schema mirror/parity vs direct import of `seed`)**: Decide whether `drosera` keeps a zero-dependency local mirror of `seed`'s schema validator checked by parity tests (matching its existing `tool-id` grammar mirror) or takes a direct dependency pin on `seed`. Also settle how `D4` interacts with `drosera` run-guard schema checks (`CAP-09`).
+- **D4 (home of the schema subset and validator, pending owner ruling)**: `seed` owns the schema subset and validator; review recommendation is that `drosera` mirrors it with a parity test (the same way it mirrors the tool grammar), rather than taking a direct dependency pin on `seed`. Also governs how `CAP-09` guard hooks interact with schema validation.
 
 ## Evidence
 
@@ -96,4 +96,5 @@ None yet. Capability is `proposed` with claim `planned`.
 
 ## Changes
 
+- `2026-11-23`: Added `M2` slice milestones and aligned `D4` wording with the canonical decision record.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).
