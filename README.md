@@ -6,7 +6,7 @@ Agent workspaces like [Bloom](https://github.com/Vidoxlabs/bloom) can orchestrat
 model-backed workers, tools, and shared artifacts without depending on any single hosted
 service or third-party harness.
 
-**Status: `0.7.0`, specification and contract modules.** The contracts, grammar, and
+**Status: `0.8.0`, specification and contract modules.** The contracts, grammar, and
 validators in this repository are implemented and covered by `npm test`. The runtime
 services on the roadmap are specified or planned, not shipped. Nothing in this repository
 opens a network listener, calls a hosted model, or touches your files today.
@@ -34,6 +34,7 @@ inspectable foundation:
 | `src/run-model.mjs` | Objective/attempt records, run statuses, legal transitions, and intent-time tool admission |
 | `src/resume.mjs` | Resume pending steps, report supplied failure classes, preview steps in a dry run, and manage in-process run leases |
 | `src/admission.mjs` | Fail-closed caller admission over a registry the caller holds |
+| `src/registry-documents.mjs` | Check agents and tools documents the caller already parsed: name a document not supplied, and report an agent that names an unknown tool |
 | `src/provider.mjs` | Validate provider adapters and normalize generation results |
 | `src/model-alias.mjs` | Resolve the alias a caller asks for to a backend model name from a table the caller holds, keeping the two names distinct and labeling deprecated aliases without swapping them |
 

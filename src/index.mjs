@@ -1,12 +1,13 @@
 /** Seed contract modules. The harness runtime is staged; these contracts are the floor. */
 
-export const VERSION = '0.7.0';
+export const VERSION = '0.8.0';
 
 export * from './tool-id.mjs';
 export * from './provider.mjs';
 export * from './run-model.mjs';
 export * from './resume.mjs';
 export * from './admission.mjs';
+export * from './registry-documents.mjs';
 export * from './model-alias.mjs';
 
 /** Print the contract surface and claim labels for a quick human read. */
@@ -19,6 +20,7 @@ Contracts (implemented):
   run-model  createObjective, transition, createAttemptRecord, recordIntent, attachReceipt
   resume     resumeSteps (dry runs, failure classes, aborts), claimLease, releaseLease, isLeaseLive
   admission  admitCaller, ADMISSION_DENIALS
+  registry   checkRegistryDocuments, RegistryDocumentError (documents the caller parsed)
   provider   validateProvider, normalizeGeneration
   models     modelAlias, modelAliasTable, resolveModel (a table the caller holds)
 

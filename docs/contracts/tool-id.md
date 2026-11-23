@@ -108,6 +108,46 @@ It fails closed. Each denial returns `{ admitted: false, code, reason }`:
 An admitted call returns `{ admitted: true, callerId, toolId }`. Decisions are frozen.
 This is a check over a list, not the registry service of stage 3.2.
 
+## Registry documents
+
+`checkRegistryDocuments({ agents, tools })` in `src/registry-documents.mjs` checks an
+agents document and a tools document together. The caller has already read and parsed
+both. The function reads no file and opens no directory.
+
+```
+agents: { agents: [{ id, allowedTools?: [toolId, ...] }] }   or null
+tools:  { tools:  [{ id }] }                                  or null
+```
+
+It returns frozen `{ ok, missing, errors }`.
+
+1. **A document not supplied is named, not located.** Each `null` document is named in
+   `missing` as `agents` or `tools`, in that order. `missing` carries no path, file
+   name, or extension. A missing tools document lists no tools, so every tool an agent
+   names is then unknown.
+2. **A value that is not a document throws.** A document that is neither a plain object
+   nor `null` throws `RegistryDocumentError`. That includes an absent key, a string, a
+   number, a boolean, a list, and a function. The message does not repeat the value.
+3. **An agent that names an unknown tool is an error.** Each name in an agent's
+   `allowedTools` must be the `id` of an entry in the tools document. Otherwise the error
+   is `agents.<id>: references unknown tool "<name>".`
+4. **Malformed entries are errors.** The `agents` or `tools` key holding something other
+   than a list, an entry without a non-empty string `id`, an `id` listed twice, and an
+   `allowedTools` that is not a list of non-empty strings are each one error. Errors are
+   prefixed `agents.<id>`, `tools.<id>`, or `<document>.#<index>` when the entry has no
+   id. A document that leaves its list out holds an empty list.
+5. **`ok` fails closed.** `ok` is true only when `missing` and `errors` are both empty.
+6. **It grants nothing.** Listing a tool gives it to no agent, and naming it on an
+   agent's `allowedTools` does not admit a call. Admission stays with `admitCaller`, which
+   this check does not change. The documents are not modified.
+7. **Only ids and `allowedTools` are read.** Fields that name nodes, services, policies,
+   or capabilities are left unread and are not checked. Tool ids are compared as
+   strings. Their grammar is `checkRegistry`'s job.
+
+This ports the predecessor's tool reference check only. Its directory resolution, file
+reads, document parsing, file paths in its missing list, and its checks of nodes,
+services, policies, capabilities, workflows, and command alignment are not ported.
+
 ## Reading classes
 
 - `read`-effect tools run inside the attempt's admitted scopes by default.
@@ -123,3 +163,7 @@ the tests exercise grammar edges, forbidden-token classes, registry-entry shape,
 declarations, and cross-entry references. The grammar itself did not change in `0.2.0`;
 `rollback` is an additive, optional registry field. Renames are additive: `legacyNames` point back, and the
 neutral ID stays the one true name.
+
+`src/registry-documents.mjs` exports `checkRegistryDocuments` and
+`RegistryDocumentError`. `0.8.0` adds them. No existing export changes, and every record
+and registry valid under `0.7.0` stays valid.
