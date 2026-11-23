@@ -1,0 +1,330 @@
+{
+  "version": 1,
+  "repo": "seed",
+  "entries": [
+    {
+      "id": "CAP-01",
+      "role": "touches",
+      "status": "in-progress",
+      "claim": "planned",
+      "spec": "docs/docs/capabilities/CAP-01-development-timeline-ledger.md",
+      "slices": [
+        {
+          "id": "CAP-01.2",
+          "title": "Seed capability docs and roadmap mapping",
+          "status": "in-progress"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-02",
+      "role": "touches",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "docs/docs/capabilities/CAP-02-docs-freshness-check.md",
+      "slices": [
+        {
+          "id": "CAP-02.2",
+          "title": "Self-test test/capabilities.test.mjs in seed",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-03",
+      "role": "lead",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "docs/capabilities/CAP-03-typed-tool-input-output.md",
+      "slices": [
+        {
+          "id": "CAP-03.1",
+          "title": "Schema subset and validator in seed plus optional outputSchema",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/tool-id.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-06",
+      "role": "lead",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "docs/capabilities/CAP-06-tool-call-approval-decisions.md",
+      "slices": [
+        {
+          "id": "CAP-06.1",
+          "title": "Owner-gate decision record and effect allowances",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-06.2",
+          "title": "Deferred call pause and fail-closed resume",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/run-model.md",
+        "docs/contracts/tool-id.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-07",
+      "role": "touches",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "aestivation/docs/capabilities/CAP-07-plan-review-approval-loop.md",
+      "slices": [
+        {
+          "id": "CAP-07.3",
+          "title": "Owner-gate record binding to plan digest",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/run-model.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-08",
+      "role": "touches",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "bloom/docs/capabilities/CAP-08-seat-orchestration.md",
+      "slices": [
+        {
+          "id": "CAP-08.1",
+          "title": "Declarative team document validation checks",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/tool-id.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-09",
+      "role": "touches",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "drosera/docs/capabilities/CAP-09-run-guards-hook-chain.md",
+      "slices": [
+        {
+          "id": "CAP-09.2",
+          "title": "Clarification pause and guard refusal codes",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/run-model.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-10",
+      "role": "touches",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "bloom/docs/capabilities/CAP-10-trace-observability.md",
+      "slices": [
+        {
+          "id": "CAP-10.1",
+          "title": "Correlation IDs on run trace records",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/run-model.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-12",
+      "role": "lead",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "docs/capabilities/CAP-12-step-graph-checkpoints-interrupts.md",
+      "slices": [
+        {
+          "id": "CAP-12.1",
+          "title": "Step graph state merge, routes, and retry policies",
+          "status": "proposed"
+        },
+        {
+          "id": "CAP-12.2",
+          "title": "Checkpoints, parallel pending writes, fork, durability, and interrupts",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [
+        "run.checkpoint.read",
+        "run.checkpoint.create",
+        "run.step.cancel"
+      ],
+      "contracts": [
+        "docs/contracts/run-model.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-13",
+      "role": "lead",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "docs/capabilities/CAP-13-durable-run-store-conformance.md",
+      "slices": [
+        {
+          "id": "CAP-13.1",
+          "title": "Durable run store interface, conformance suite, and in-memory reference",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/run-model.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-14",
+      "role": "touches",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "bloom/docs/capabilities/CAP-14-eval-harness.md",
+      "slices": [
+        {
+          "id": "CAP-14.1",
+          "title": "Scripted and function model test doubles",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/provider.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-16",
+      "role": "lead",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "docs/capabilities/CAP-16-provider-conformance-model-profiles.md",
+      "slices": [
+        {
+          "id": "CAP-16.1",
+          "title": "Recorded provider conformance fixtures and model profile contract",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/provider.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    },
+    {
+      "id": "CAP-17",
+      "role": "lead",
+      "status": "proposed",
+      "claim": "planned",
+      "spec": "docs/capabilities/CAP-17-sandbox-scopes.md",
+      "slices": [
+        {
+          "id": "CAP-17.1",
+          "title": "Per-run sandbox scope contract and default-off shell policy",
+          "status": "proposed"
+        }
+      ],
+      "toolIds": [],
+      "contracts": [
+        "docs/contracts/run-model.md",
+        "docs/contracts/tool-id.md"
+      ],
+      "tests": [],
+      "prs": [],
+      "commits": [],
+      "adr": [],
+      "decision": null,
+      "updated": "2026-11-23"
+    }
+  ]
+}
