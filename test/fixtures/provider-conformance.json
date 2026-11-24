@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "note": "Recorded provider request and response cases for offline conformance checks. Every value is synthetic. No case names an address, host, or credential.",
+  "cases": [
+    {
+      "id": "valid-complete-full-usage",
+      "class": "valid",
+      "request": { "system": "Answer briefly.", "prompt": "Name one prime number.", "model": "team-instruct" },
+      "response": {
+        "text": "Seven.",
+        "complete": true,
+        "model": "family-7b-instruct-q4",
+        "usage": { "input": 14, "output": 3, "total": 17, "cacheRead": 0, "cacheWrite": 0 }
+      },
+      "expect": {
+        "ok": true,
+        "generation": {
+          "text": "Seven.",
+          "complete": true,
+          "model": "family-7b-instruct-q4",
+          "usage": { "input": 14, "output": 3, "total": 17, "cacheRead": 0, "cacheWrite": 0 }
+        }
+      }
+    },
+    {
+      "id": "valid-complete-usage-unreported",
+      "class": "valid",
+      "request": { "system": "Answer briefly.", "prompt": "Name one even number.", "model": "team-instruct" },
+      "response": { "text": "Four.", "complete": true, "model": "family-7b-instruct-q4", "usage": null },
+      "expect": {
+        "ok": true,
+        "generation": { "text": "Four.", "complete": true, "model": "family-7b-instruct-q4", "usage": null }
+      }
+    },
+    {
+      "id": "valid-partial-usage-stays-null",
+      "class": "valid",
+      "request": { "system": "Answer briefly.", "prompt": "Name a colour.", "model": "team-instruct" },
+      "response": { "text": "Blue.", "complete": true, "model": null, "usage": { "input": 9, "output": 2 } },
+      "expect": {
+        "ok": true,
+        "generation": {
+          "text": "Blue.",
+          "complete": true,
+          "model": null,
+          "usage": { "input": 9, "output": 2, "total": null, "cacheRead": null, "cacheWrite": null }
+        }
+      }
+    },
+    {
+      "id": "malformed-missing-text",
+      "class": "malformed",
+      "request": { "system": "Answer briefly.", "prompt": "Say hello.", "model": "team-instruct" },
+      "response": { "complete": true, "model": "family-7b-instruct-q4", "usage": null },
+      "expect": { "ok": false, "errors": ["text must be a string (empty is allowed)."] }
+    },
+    {
+      "id": "malformed-complete-not-boolean",
+      "class": "malformed",
+      "request": { "system": "Answer briefly.", "prompt": "Say hello.", "model": "team-instruct" },
+      "response": { "text": "Hello.", "complete": "stop", "model": "family-7b-instruct-q4", "usage": null },
+      "expect": { "ok": false, "errors": ["complete must be a boolean."] }
+    },
+    {
+      "id": "malformed-unknown-usage-field",
+      "class": "malformed",
+      "request": { "system": "Answer briefly.", "prompt": "Say hello.", "model": "team-instruct" },
+      "response": {
+        "text": "Hello.",
+        "complete": true,
+        "model": "family-7b-instruct-q4",
+        "usage": { "input": 4, "output": 2, "total": 6, "reasoning": 1 }
+      },
+      "expect": { "ok": false, "errors": ["usage.reasoning is not a known usage field."] }
+    },
+    {
+      "id": "malformed-negative-usage-count",
+      "class": "malformed",
+      "request": { "system": "Answer briefly.", "prompt": "Say hello.", "model": "team-instruct" },
+      "response": { "text": "Hello.", "complete": true, "model": "family-7b-instruct-q4", "usage": { "input": -1 } },
+      "expect": { "ok": false, "errors": ["usage.input must be null or a non-negative integer."] }
+    },
+    {
+      "id": "malformed-fractional-usage-count",
+      "class": "malformed",
+      "request": { "system": "Answer briefly.", "prompt": "Say hello.", "model": "team-instruct" },
+      "response": { "text": "Hello.", "complete": true, "model": "family-7b-instruct-q4", "usage": { "output": 2.5 } },
+      "expect": { "ok": false, "errors": ["usage.output must be null or a non-negative integer."] }
+    },
+    {
+      "id": "malformed-model-not-a-string",
+      "class": "malformed",
+      "request": { "system": "Answer briefly.", "prompt": "Say hello.", "model": "team-instruct" },
+      "response": { "text": "Hello.", "complete": true, "model": 7, "usage": null },
+      "expect": { "ok": false, "errors": ["model must be a string or null."] }
+    },
+    {
+      "id": "truncated-length-limit",
+      "class": "truncated",
+      "request": { "system": "Answer at length.", "prompt": "List ten fruits.", "model": "team-instruct" },
+      "response": {
+        "text": "Apple, banana, cherry, da",
+        "complete": false,
+        "model": "family-7b-instruct-q4",
+        "usage": { "input": 12, "output": 8, "total": 20 }
+      },
+      "expect": {
+        "ok": true,
+        "generation": {
+          "text": "Apple, banana, cherry, da",
+          "complete": false,
+          "model": "family-7b-instruct-q4",
+          "usage": { "input": 12, "output": 8, "total": 20, "cacheRead": null, "cacheWrite": null }
+        }
+      }
+    },
+    {
+      "id": "slow-stream-aborted-mid-reply",
+      "class": "slow-stream",
+      "request": { "system": "Answer at length.", "prompt": "Describe a river.", "model": "team-instruct" },
+      "stream": {
+        "chunks": ["A river ", "runs from ", "the hills ", "to the sea."],
+        "abortAfterChunks": 2,
+        "final": { "complete": true, "model": "family-7b-instruct-q4", "usage": { "input": 10, "output": 9, "total": 19 } }
+      },
+      "expect": {
+        "ok": true,
+        "generation": { "text": "A river runs from ", "complete": false, "model": null, "usage": null }
+      }
+    },
+    {
+      "id": "slow-stream-finished",
+      "class": "slow-stream",
+      "request": { "system": "Answer briefly.", "prompt": "Describe a lake.", "model": "team-instruct" },
+      "stream": {
+        "chunks": ["Still ", "water."],
+        "abortAfterChunks": null,
+        "final": { "complete": true, "model": "family-7b-instruct-q4", "usage": null }
+      },
+      "expect": {
+        "ok": true,
+        "generation": { "text": "Still water.", "complete": true, "model": "family-7b-instruct-q4", "usage": null }
+      }
+    },
+    {
+      "id": "unavailable-model-is-an-error",
+      "class": "unavailable-model",
+      "request": { "system": "Answer briefly.", "prompt": "Say hello.", "model": "retired-alias" },
+      "response": { "error": "model-unavailable", "requested": "retired-alias" },
+      "expect": {
+        "ok": false,
+        "errors": ["text must be a string (empty is allowed).", "complete must be a boolean."]
+      }
+    }
+  ]
+}
