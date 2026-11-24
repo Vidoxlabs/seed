@@ -1,5 +1,7 @@
 /** Neutral tool identity. The grammar is specified in docs/contracts/tool-id.md. */
 
+import { checkSchema } from './schema.mjs';
+
 const SEGMENT = /^[a-z][a-z0-9-]*$/;
 
 /** Segments that look like infrastructure or environment names, never part of a tool ID. */
@@ -120,6 +122,11 @@ export function isWellFormedRegistryEntry(entry) {
   if (typeof thirdPartyEgress !== 'boolean') fail('thirdPartyEgress must be a boolean.');
   if (typeof ownerGate !== 'boolean') fail('ownerGate must be a boolean.');
   if (inputSchema === undefined || inputSchema === null || typeof inputSchema !== 'object') fail('inputSchema must be an object.');
+  if ('outputSchema' in entry) {
+    for (const { path, reason } of checkSchema(entry.outputSchema).errors) {
+      fail(`outputSchema${path}: ${reason}`);
+    }
+  }
   if (legacyNames !== undefined && !Array.isArray(legacyNames)) fail('legacyNames must be an array when present.');
   if (Array.isArray(legacyNames)) for (const name of legacyNames) if (!isValidToolId(name)) fail(`Legacy name "${name}" is not a well-formed tool ID.`);
   errors.push(...rollbackErrors(rollback));

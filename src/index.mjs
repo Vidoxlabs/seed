@@ -1,8 +1,9 @@
 /** Seed contract modules. The harness runtime is staged; these contracts are the floor. */
 
-export const VERSION = '0.8.0';
+export const VERSION = '0.9.0';
 
 export * from './tool-id.mjs';
+export * from './schema.mjs';
 export * from './provider.mjs';
 export * from './run-model.mjs';
 export * from './resume.mjs';
@@ -17,6 +18,7 @@ seed ${VERSION} — a local-first agent harness foundation. Contract modules onl
 Contracts (implemented):
   tool-id    parseToolId, formatToolId, isValidToolId, isWellFormedRegistryEntry,
              checkRegistry, rollbackPosture, ROLLBACK_POSTURES
+  schema     checkSchema, validateValue
   run-model  createObjective, transition, createAttemptRecord, recordIntent, attachReceipt
   resume     resumeSteps (dry runs, failure classes, aborts), claimLease, releaseLease, isLeaseLive
   admission  admitCaller, ADMISSION_DENIALS
