@@ -1,3 +1,10 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/seed-banner-dark.svg">
+  <img src=".github/assets/seed-banner.svg" alt="Seed banner: a seed with a vertical contract seam, and the tagline Contracts and schemas for the runtime." width="1280">
+</picture>
+
+Contracts and schemas for the runtime
+
 # Seed
 
 Seed is an open, local-first harness foundation for AI agents. It defines the contracts an
@@ -80,3 +87,5 @@ Details and worked examples: [docs/bloom-interop.md](docs/bloom-interop.md).
 ## License
 
 [MIT](LICENSE)
+
+The Vidoxlabs name and mark are trademarks of Vidoxlabs LLC. They are not covered by this repository's MIT license.
