@@ -11,3 +11,8 @@ Earlier release history (0.2.0 through 0.8.0) lives in the Changes sections of d
 - Closed tool schema validation and optional registry output schemas (CAP-03, seed#3).
 - Model profile validator with reported, probed, and unknown provenance, plus recorded offline provider conformance fixtures (CAP-16, seed#4).
 - Recorded owner decisions for the bloom doctor probe slice, now landed in bloom (CAP-16, seed#6).
+- End-to-end harness exercise that composes the registry, admission, provider, run record, receipt, lease and resume contracts in one run (CAP-12, seed#7).
+
+### Changed
+
+- Rule 3 of the run model and the run-engine paragraph state that a restart resumes from a receipt, not an intent, and that an intent with no receipt goes to the owner (CAP-12, seed#7).

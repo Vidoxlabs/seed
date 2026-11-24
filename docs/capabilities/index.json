@@ -271,12 +271,15 @@
       "contracts": [
         "docs/contracts/run-model.md"
       ],
-      "tests": [],
+      "tests": [
+        "test/resume.test.mjs",
+        "test/harness-run.test.mjs"
+      ],
       "prs": [],
       "commits": [],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-13",
