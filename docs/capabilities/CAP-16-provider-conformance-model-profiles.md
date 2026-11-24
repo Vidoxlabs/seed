@@ -84,11 +84,11 @@ None defined by this capability. Probe diagnostic output and runtime trace event
 
 ## Open owner decisions
 
-- `D20` Decided 2026-11-24 in bloom#6: Timeouts: 5 seconds for the models list and 30 seconds for the one-token streaming request? The spec leaves these open. (Recommend yes.) Owner's answer, verbatim: "Accept all".
-- `D21` Decided 2026-11-24 in bloom#6: Unknown tool calling: if the probe can't confirm native tool calling, the loop keeps the fenced json action format from D16 instead of refusing to start. The loop only uses that text format anyway. (Recommend fallback.) Owner's answer, verbatim: "Accept all".
-- `D22` Decided 2026-11-24 in bloom#6: Where the profile lives: `doctor --probe` writes `profiles.json` in bloom's data directory, keyed by provider config name and model alias, and the coding loop reads it. If there is no profile, every slot counts as unknown and the loop uses default budgets. The file holds no address. (Recommend yes.) Owner's answer, verbatim: "Accept all".
-- `D23` Decided 2026-11-24 in bloom#6: What gets probed: only the models list and the fixed one-token streaming request. Context length, constrained output and tool calling are `reported` only if the models list exposes them, and `unknown` otherwise. No extra probe request carries a tools or schema field. (Recommend yes.) Owner's answer, verbatim: "Accept all".
-- `D24` Decided 2026-11-24 in bloom#6: Exit code: `doctor --probe` exits 1 on any `fail`, such as unreachable or the configured alias missing. An `unknown` never fails. (Recommend yes.) Owner's answer, verbatim: "Accept all".
+- `D20` Decided 2026-11-24 in bloom#7: Timeouts: 5 seconds for the models list and 30 seconds for the one-token streaming request? The spec leaves these open. (Recommend yes.) Owner's answer, verbatim: "Accept all".
+- `D21` Decided 2026-11-24 in bloom#7: Unknown tool calling: if the probe can't confirm native tool calling, the loop keeps the fenced json action format from D16 instead of refusing to start. The loop only uses that text format anyway. (Recommend fallback.) Owner's answer, verbatim: "Accept all".
+- `D22` Decided 2026-11-24 in bloom#7: Where the profile lives: `doctor --probe` writes `profiles.json` in bloom's data directory, keyed by provider config name and model alias, and the coding loop reads it. If there is no profile, every slot counts as unknown and the loop uses default budgets. The file holds no address. (Recommend yes.) Owner's answer, verbatim: "Accept all".
+- `D23` Decided 2026-11-24 in bloom#7: What gets probed: only the models list and the fixed one-token streaming request. Context length, constrained output and tool calling are `reported` only if the models list exposes them, and `unknown` otherwise. No extra probe request carries a tools or schema field. (Recommend yes.) Owner's answer, verbatim: "Accept all".
+- `D24` Decided 2026-11-24 in bloom#7: Exit code: `doctor --probe` exits 1 on any `fail`, such as unreachable or the configured alias missing. An `unknown` never fails. (Recommend yes.) Owner's answer, verbatim: "Accept all".
 
 ## Evidence
 
@@ -97,7 +97,7 @@ None defined by this capability. Probe diagnostic output and runtime trace event
 
 ## Changes
 
-- `2026-11-24`: Record the CAP-16.3 probe decisions D20 to D24 and mark the bloom slice landed (CAP-16, bloom#6).
+- `2026-11-24`: Record the CAP-16.3 probe decisions D20 to D24 and mark the bloom slice landed (CAP-16, bloom#7).
 - `2026-11-24`: Ship recorded offline conformance fixtures and the model profile validator in seed 0.10.0 (CAP-16, seed#4).
 - `2026-11-23`: Added `M4` slice milestones across `CAP-16.1`..`CAP-16.3`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).
