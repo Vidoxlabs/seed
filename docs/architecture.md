@@ -22,9 +22,10 @@ services are contract documents until their stage ships.
 - **Run engine** (`specified` per [run model](contracts/run-model.md)). Work is an
   *objective* (an intent plus acceptance criteria) carried out by *attempts*. An attempt
   records its intended effect before the effect runs, holds a lease while it works, and
-  *completes only with a verification receipt at the current revision*. Restarting the
-  process never silently repeats an effect; an attempt resumes from its recorded intents
-  or asks the owner.
+  *completes only with a verification receipt at the current revision*. An intent is
+  written before its effect, so an intent is not proof that the effect landed: a restarted
+  attempt resumes only from the steps a receipt proves complete, and an intent with no
+  receipt goes to the owner rather than to either a skip or a retry.
 - **Tool registry** (`specified` per [tool identity](contracts/tool-id.md)). One place
   that maps neutral tool IDs to connector bindings, effect classes, and schemas. Tools
   are enumerated before a run starts; a run may only call tools admitted to it.

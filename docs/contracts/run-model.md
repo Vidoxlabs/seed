@@ -57,8 +57,10 @@ Legal transitions:
    receipt naming the objective's acceptance check at the current revision.
 2. **Effects are intended first.** The intent precedes the effect in the record; replay
    logic reads intents, never guesses from outputs.
-3. **Restarts do not repeat effects.** A restarted attempt resumes from recorded intents,
-   and an unclear non-idempotent intent goes to the owner, not the retry loop.
+3. **Restarts do not repeat effects.** An intent is recorded before its effect, so an
+   intent cannot say whether the effect ran. A restarted attempt resumes only from the
+   steps a receipt proves complete, and an unclear non-idempotent intent goes to the
+   owner, not to the retry loop.
 4. **Stops are honored.** A stopping run finishes the in-flight read, holds the effect,
    and lands at `stopped` with what it completed left truthful.
 5. **The gate binds to the digest.** An owner decision names the exact digest of the

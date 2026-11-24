@@ -95,9 +95,13 @@ None defined in `seed`. Step graph lifecycle and checkpoint events emitted by `b
 
 ## Evidence
 
-None yet. Capability is `proposed` with claim `planned`.
+The in-process resume rules are `implemented` and exercised by `test/resume.test.mjs`,
+and by `test/harness-run.test.mjs` for the receipt-over-intent rule across a restart.
+Step graphs, checkpoints, fork, and interrupts remain `specified` (`CAP-12.2`), so the
+capability claim stays `planned`.
 
 ## Changes
 
+- `2026-11-24`: Evidence section records the in-process resume coverage, including the receipt-over-intent rule across a restart (`test/harness-run.test.mjs`).
 - `2026-11-23`: Added `M7` slice milestones across `CAP-12.1`..`CAP-12.3`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).
