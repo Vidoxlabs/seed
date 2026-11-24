@@ -343,15 +343,15 @@
     {
       "id": "CAP-16",
       "role": "lead",
-      "status": "proposed",
-      "claim": "planned",
+      "status": "in-progress",
+      "claim": "specified",
       "spec": "docs/capabilities/CAP-16-provider-conformance-model-profiles.md",
       "slices": [
         {
           "id": "CAP-16.1",
           "title": "Recorded provider conformance fixtures and model profile contract",
           "milestone": "M4",
-          "status": "proposed"
+          "status": "landed"
         },
         {
           "id": "CAP-16.2",
@@ -370,12 +370,17 @@
       "contracts": [
         "docs/contracts/provider.md"
       ],
-      "tests": [],
-      "prs": [],
+      "tests": [
+        "test/model-profile.test.mjs",
+        "test/provider-conformance.test.mjs"
+      ],
+      "prs": [
+        "seed#4"
+      ],
       "commits": [],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-17",

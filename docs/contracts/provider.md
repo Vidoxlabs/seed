@@ -1,6 +1,7 @@
 # Contract: provider adapter
 
-Status: `specified`; validation and normalization are `implemented` in `src/provider.mjs`.
+Status: `specified`; validation and normalization are `implemented` in `src/provider.mjs`, and model
+profiles are `implemented` in `src/model-profile.mjs`.
 
 ## The seam
 
@@ -69,6 +70,56 @@ resolveModel(table, requested)
 
 Serving these names over a local endpoint is stage 2, and stays `specified`.
 
+## Model profiles
+
+`implemented` in `src/model-profile.mjs`. A model profile says what a configured model can
+do, and where each answer came from:
+
+```
+checkModelProfile(record) -> { ok, errors }
+modelProfile(record)      -> frozen copy, or throws ModelProfileError
+PROFILE_SLOTS   = ['model', 'contextLength', 'toolCalling', 'constrainedOutput', 'streaming']
+PROFILE_SOURCES = ['reported', 'probed', 'unknown']
+```
+
+Every slot is `{ value, source }`:
+
+| Slot | Known value |
+| --- | --- |
+| `model` | a non-empty string, the model that answers |
+| `contextLength` | a positive safe integer |
+| `toolCalling` | a boolean |
+| `constrainedOutput` | a boolean |
+| `streaming` | a boolean |
+
+1. **Provenance is required.** `reported` means a backend declared the value, `probed` means
+   a probe observed it, and `unknown` means neither. No other source is accepted.
+2. **Unknown is not a guess.** An `unknown` slot carries `value: null`. An `unknown` slot with
+   a value is refused, so no default context window or optimistic `true` passes as known.
+3. **Known means known.** A `reported` or `probed` slot needs a value of the slot's type. A
+   probed `false` is a known answer.
+4. **The record is closed.** Only the five slots, and only `value` and `source` inside each.
+   A profile holds no endpoint address, host, or credential, and error text names the slot
+   and the expectation without repeating a supplied value.
+5. **Seed checks truth, not capability.** Seed builds no profile from a backend. Probing is
+   the consumer's job; seed only refuses a record that claims more than it knows.
+
+## Recorded conformance fixtures
+
+`test/fixtures/provider-conformance.json` holds recorded request and response cases with
+synthetic values. `test/provider-conformance.test.mjs` replays each case through a recorded
+adapter, `validateProvider`, and `normalizeGeneration` with `fetch` disabled, and checks:
+
+- valid completions with full, partial, and unreported usage (`null`, never `0`);
+- malformed records (missing `text`, non-boolean `complete`, unknown usage field, negative or
+  fractional counts, non-string `model`) fail closed with the named violation;
+- truncated completions keep `complete: false`;
+- a slow stream aborted by `signal` resolves with the partial text, `complete: false`, and
+  `usage: null`, and the same stream left to finish earns `complete: true`;
+- an unavailable model fails closed, and no other model is named in its place.
+
+The fixtures name no address, host, or credential, and a test holds that.
+
 ## The OpenAI-compatible tier
 
 Hosted and local services that already speak the chat-completions HTTP surface
@@ -83,6 +134,9 @@ conforming record or names every contract violation).
 
 ## Changes
 
+- `0.10.0` adds `checkModelProfile`, `modelProfile`, `ModelProfileError`, `PROFILE_SLOTS`, and
+  `PROFILE_SOURCES` in `src/model-profile.mjs`, with recorded offline conformance fixtures.
+  Additive; no existing export changed.
 - `0.4.0` — model names (`modelAlias`, `modelAliasTable`, `resolveModel`,
   `ModelAliasError`) are new exports in `src/model-alias.mjs`. Additive; no existing
   export changed. Stage 2 stays `specified`.

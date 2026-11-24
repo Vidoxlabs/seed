@@ -9,3 +9,4 @@ Earlier release history (0.2.0 through 0.8.0) lives in the Changes sections of d
 - Capability ledger (`docs/capabilities/`), six lead capability specifications (`CAP-03`, `CAP-06`, `CAP-12`, `CAP-13`, `CAP-16`, `CAP-17`), ADR convention pointer (`docs/adr/README.md`), and roadmap capability mapping (CAP-01, seed#1).
 - Standalone capability ledger checks and scaffold squash evidence (CAP-02, seed#2).
 - Closed tool schema validation and optional registry output schemas (CAP-03, seed#3).
+- Model profile validator with reported, probed, and unknown provenance, plus recorded offline provider conformance fixtures (CAP-16, seed#4).
