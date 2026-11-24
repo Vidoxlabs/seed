@@ -69,7 +69,7 @@ None defined by this capability. Probe diagnostic output and runtime trace event
 
 - `CAP-16.1` (`seed`, milestone `M4`, status `landed`): Ship recorded offline provider conformance fixtures (including malformed, truncated, slow-stream) and the model profile contract/validator in `seed`.
 - `CAP-16.2` (`trellis`, milestone `M4`, status `proposed`): Implement provider conformance behavior probes over injected test adapters (`trellis`).
-- `CAP-16.3` (`bloom`, milestone `M4`, status `proposed`): Implement `bloom doctor --probe` model profile detection and profile-driven prompt style, budget, and constrained output wiring (`bloom`).
+- `CAP-16.3` (`bloom`, milestone `M4`, status `landed`): Implement `bloom doctor --probe` model profile detection and profile-driven prompt style, budget, and constrained output wiring (`bloom`).
 
 ## Non-goals
 
@@ -84,14 +84,20 @@ None defined by this capability. Probe diagnostic output and runtime trace event
 
 ## Open owner decisions
 
-- **Slow-stream timeout thresholds and unknown-capability defaults in `bloom`**: Default probe timeout values for `bloom doctor --probe` and whether `bloom` treats `unknown` tool-calling as text-only fallback vs hard stop (to be ratified when `M4` opens; `seed` enforces schema and provenance truth only).
+- `D20` Decided 2026-11-24 in bloom#7: Timeouts: 5 seconds for the models list and 30 seconds for the one-token streaming request? The spec leaves these open. (Recommend yes.) Owner's answer, verbatim: "Accept all".
+- `D21` Decided 2026-11-24 in bloom#7: Unknown tool calling: if the probe can't confirm native tool calling, the loop keeps the fenced json action format from D16 instead of refusing to start. The loop only uses that text format anyway. (Recommend fallback.) Owner's answer, verbatim: "Accept all".
+- `D22` Decided 2026-11-24 in bloom#7: Where the profile lives: `doctor --probe` writes `profiles.json` in bloom's data directory, keyed by provider config name and model alias, and the coding loop reads it. If there is no profile, every slot counts as unknown and the loop uses default budgets. The file holds no address. (Recommend yes.) Owner's answer, verbatim: "Accept all".
+- `D23` Decided 2026-11-24 in bloom#7: What gets probed: only the models list and the fixed one-token streaming request. Context length, constrained output and tool calling are `reported` only if the models list exposes them, and `unknown` otherwise. No extra probe request carries a tools or schema field. (Recommend yes.) Owner's answer, verbatim: "Accept all".
+- `D24` Decided 2026-11-24 in bloom#7: Exit code: `doctor --probe` exits 1 on any `fail`, such as unreachable or the configured alias missing. An `unknown` never fails. (Recommend yes.) Owner's answer, verbatim: "Accept all".
 
 ## Evidence
 
 - `CAP-16.1` is exercised by four cases in `test/provider-conformance.test.mjs` over thirteen recorded cases in `test/fixtures/provider-conformance.json`, run with `fetch` disabled, and by five cases in `test/model-profile.test.mjs` covering unknown slots, missing provenance, closed value types, a closed record with no endpoint field, and frozen copies.
+- `CAP-16.3` is exercised in bloom by `test/doctor-probe.test.mjs` (`bloom-doctor-probe-drives-prompt-config`, `probe-unknown-never-pass`, `probe-failure-reasons-and-exit-codes`, `probe-output-never-contains-endpoint-marker`) against a fake server through an injected fetch, and by `cli-doctor-probe-profile-drives-run` in `test/cli-coding.test.mjs`.
 
 ## Changes
 
+- `2026-11-24`: Record the CAP-16.3 probe decisions D20 to D24 and mark the bloom slice landed (CAP-16, bloom#7).
 - `2026-11-24`: Ship recorded offline conformance fixtures and the model profile validator in seed 0.10.0 (CAP-16, seed#4).
 - `2026-11-23`: Added `M4` slice milestones across `CAP-16.1`..`CAP-16.3`.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).
