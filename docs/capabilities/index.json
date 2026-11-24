@@ -363,7 +363,7 @@
           "id": "CAP-16.3",
           "title": "Doctor probe model profile and profile-driven prompts and budgets in bloom",
           "milestone": "M4",
-          "status": "proposed"
+          "status": "landed"
         }
       ],
       "toolIds": [],
@@ -375,7 +375,9 @@
         "test/provider-conformance.test.mjs"
       ],
       "prs": [
-        "seed#4"
+        "seed#4",
+        "seed#6",
+        "bloom#6"
       ],
       "commits": [],
       "adr": [],
