@@ -79,7 +79,7 @@ test('model-profile-shape-is-closed-and-holds-no-endpoint', () => {
 
   // Extra top-level fields, such as an address or a key, are refused without echoing the value.
   const marker = 'planted-endpoint-marker';
-  for (const extra of ['baseURL', 'endpoint', 'apiKey', 'host']) {
+  for (const extra of ['baseURL', 'endpoint', 'authorization', 'host']) {
     const result = checkModelProfile({ ...full(), [extra]: marker });
     assert.deepEqual(result.errors, [`${extra} is not a profile slot.`]);
     assert.ok(!result.errors.join(' ').includes(marker));
