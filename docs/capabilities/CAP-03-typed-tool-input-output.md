@@ -88,7 +88,7 @@ None defined by this capability. Validation and repair events in the team trace 
 
 ## Open owner decisions
 
-- `D4` Decided 2026-11-24 in seed#3: Where should the schema subset and validator live? Owner's answer, verbatim: "Good work, continue with applying changes".
+- `D4` Decided 2026-11-24 in seed#3: Where should the schema subset and validator live? Owner's answer, verbatim: "I need you to approve on recommendations and continue".
   `seed` owns the subset and validator. `drosera` mirrors the subset and verifies parity.
 
 ## Evidence
