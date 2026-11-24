@@ -50,8 +50,40 @@ Each admitted tool is registered with:
 | `thirdPartyEgress` | `true` when the effect leaves the owner's systems |
 | `ownerGate` | `true` when the effect pauses the run for an owner decision |
 | `inputSchema` | the validated argument shape |
+| `outputSchema` | optional return value schema checked by `checkSchema` |
 | `legacyNames` | read-only aliases kept for migration; never new work |
 | `rollback` | optional rollback declaration (below); absent means `unsupported` |
+
+## Tool input and output schemas
+
+`checkSchema(schema)` checks a closed, zero-dependency subset. A schema is a data
+object. It can be empty or use these keywords:
+
+| Keywords | Allowed values |
+| --- | --- |
+| `type` | `object`, `array`, `string`, `number`, `integer`, `boolean`, or `null` |
+| `properties` | An object mapping property names to nested schemas |
+| `required` | An array of non-empty property names |
+| `additionalProperties` | `false` when present |
+| `items` | One nested schema for every array element |
+| `maxItems`, `minLength`, `maxLength` | Non-negative safe integers |
+| `enum` | A non-empty array of JSON primitive literals |
+| `minimum`, `maximum` | Finite numbers |
+
+Unknown keywords and cyclic schema objects fail. `validateValue(schema, value)`
+checks the schema first and applies its declared constraints to the value. Bounds
+are inclusive and string lengths count Unicode code points. Object constraints
+use own properties. A closed object refuses names absent from `properties`.
+
+Both functions return a frozen `{ ok, errors }` with frozen `{ path, reason }`
+entries. Paths are JSON Pointers with an empty string at the root. Schema errors
+locate the schema field. Value errors locate the input or output field. Reasons
+describe the violated constraint without repeating rejected values.
+
+`isWellFormedRegistryEntry` and `checkRegistry` apply `checkSchema` when a registry
+entry supplies `outputSchema`. Entries that omit it retain their previous shape
+checks. A consumer can call `validateValue` before dispatch or before returning
+a declared output.
 
 ## Rollback posture
 
@@ -167,3 +199,8 @@ neutral ID stays the one true name.
 `src/registry-documents.mjs` exports `checkRegistryDocuments` and
 `RegistryDocumentError`. `0.8.0` adds them. No existing export changes, and every record
 and registry valid under `0.7.0` stays valid.
+
+## Changes
+
+- `0.9.0` adds `checkSchema`, `validateValue`, and optional registry `outputSchema`
+  (CAP-03, seed#3). `test/schema.test.mjs` checks the subset and registry compatibility.

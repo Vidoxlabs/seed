@@ -7,8 +7,8 @@
 - Horizon: `now`
 - Milestone: `M2`
 - CLI phase: `P2`
-- Status: `proposed`
-- Claim: `planned`
+- Status: `in-progress`
+- Claim: `specified`
 - Depends on: none
 
 ## Why
@@ -33,7 +33,7 @@
    - Registry entries in `src/tool-id.mjs` gain an optional `outputSchema` field validated by `checkSchema`.
    - Omitting `outputSchema` stays valid (additive minor change keeping `0.8.0` entries valid); supplying an invalid `outputSchema` fails `isWellFormedRegistryEntry` and `checkRegistry`.
 4. **Consumer execution flow in `drosera` and `bloom`**:
-   - `drosera` tool faces accept optional `inputSchema` and `outputSchema` constrained by the same subset (mirror vs direct import subject to owner decision `D4`).
+   - `drosera` tool faces accept optional `inputSchema` and `outputSchema` constrained by a dependency-free mirror of the `seed` subset, verified by parity tests.
    - Before dispatching any tool call, `bloom` validates arguments with `validateValue(entry.inputSchema, args)`. On failure, the tool does not execute; `bloom` sends one structured repair turn naming the JSON-pointer errors. If the repaired arguments still fail validation, the call stops with failure class `malformed` (aligned with `schema-invalid` in `run-model.md`).
    - When a tool declares `outputSchema`, `bloom` validates the tool's output before handing it back to the model; an output validation failure counts against the same single-turn repair budget so invalid tool outputs never trigger unbounded retries.
 
@@ -70,7 +70,7 @@ None defined by this capability. Validation and repair events in the team trace 
 
 ## Slices
 
-- `CAP-03.1` (`seed`, milestone `M2`, status `proposed`): Implement the closed schema subset (`checkSchema`, `validateValue`) in `seed` and add optional `outputSchema` to registry entries (`docs/contracts/tool-id.md`, additive minor bump).
+- `CAP-03.1` (`seed`, milestone `M2`, status `landed`): Implement the closed schema subset (`checkSchema`, `validateValue`) in `seed` and add optional `outputSchema` to registry entries (`docs/contracts/tool-id.md`, additive minor bump).
 - `CAP-03.2` (`drosera`, milestone `M2`, status `proposed`): Add optional `inputSchema` and `outputSchema` validation on tool faces with parity verification against `seed`.
 - `CAP-03.3` (`bloom`, milestone `M2`, status `proposed`): Wire pre-dispatch `inputSchema` checking, one repair turn then `malformed`, and `outputSchema` validation sharing the repair budget.
 
@@ -88,13 +88,15 @@ None defined by this capability. Validation and repair events in the team trace 
 
 ## Open owner decisions
 
-- **D4 (home of the schema subset and validator, pending owner ruling)**: `seed` owns the schema subset and validator; review recommendation is that `drosera` mirrors it with a parity test (the same way it mirrors the tool grammar), rather than taking a direct dependency pin on `seed`. Also governs how `CAP-09` guard hooks interact with schema validation.
+- `D4` Decided 2026-11-24 in seed#3: Where should the schema subset and validator live? Owner's answer, verbatim: "I need you to approve on recommendations and continue".
+  `seed` owns the subset and validator. `drosera` mirrors the subset and verifies parity.
 
 ## Evidence
 
-None yet. Capability is `proposed` with claim `planned`.
+- `CAP-03.1` is exercised by six cases in `test/schema.test.mjs` covering nested schema refusal, redacted error paths, bounds, closed objects, and registry compatibility.
 
 ## Changes
 
+- `2026-11-24`: Record `D4` and ship the closed schema subset with optional registry output schemas (CAP-03, seed#3).
 - `2026-11-23`: Added `M2` slice milestones and aligned `D4` wording with the canonical decision record.
 - `2026-11-23`: Initial capability specification created (`CAP-01.2` scaffold).

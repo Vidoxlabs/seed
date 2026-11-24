@@ -62,15 +62,15 @@
     {
       "id": "CAP-03",
       "role": "lead",
-      "status": "proposed",
-      "claim": "planned",
+      "status": "in-progress",
+      "claim": "specified",
       "spec": "docs/capabilities/CAP-03-typed-tool-input-output.md",
       "slices": [
         {
           "id": "CAP-03.1",
           "title": "Schema subset and validator in seed plus optional outputSchema",
           "milestone": "M2",
-          "status": "proposed"
+          "status": "landed"
         },
         {
           "id": "CAP-03.2",
@@ -89,12 +89,16 @@
       "contracts": [
         "docs/contracts/tool-id.md"
       ],
-      "tests": [],
-      "prs": [],
+      "tests": [
+        "test/schema.test.mjs"
+      ],
+      "prs": [
+        "seed#3"
+      ],
       "commits": [],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-06",
