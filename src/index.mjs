@@ -1,6 +1,6 @@
 /** Seed contract modules. The harness runtime is staged; these contracts are the floor. */
 
-export const VERSION = '0.9.0';
+export const VERSION = '0.10.0';
 
 export * from './tool-id.mjs';
 export * from './schema.mjs';
@@ -10,6 +10,7 @@ export * from './resume.mjs';
 export * from './admission.mjs';
 export * from './registry-documents.mjs';
 export * from './model-alias.mjs';
+export * from './model-profile.mjs';
 
 /** Print the contract surface and claim labels for a quick human read. */
 const about = () => `
@@ -25,6 +26,7 @@ Contracts (implemented):
   registry   checkRegistryDocuments, RegistryDocumentError (documents the caller parsed)
   provider   validateProvider, normalizeGeneration
   models     modelAlias, modelAliasTable, resolveModel (a table the caller holds)
+  profile    checkModelProfile, modelProfile, PROFILE_SLOTS, PROFILE_SOURCES
 
 Runtime services (specified, not shipped): local inference endpoint (stage 2),
 durable run store, tool registry, owner gate (stage 3). See docs/roadmap.md.
