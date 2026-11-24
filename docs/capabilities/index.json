@@ -5,50 +5,59 @@
     {
       "id": "CAP-01",
       "role": "touches",
-      "status": "in-progress",
-      "claim": "planned",
+      "status": "landed",
+      "claim": "implemented",
       "spec": "docs/docs/capabilities/CAP-01-development-timeline-ledger.md",
       "slices": [
         {
           "id": "CAP-01.2",
           "title": "Seed capability docs and roadmap mapping",
           "milestone": "M0",
-          "status": "in-progress"
+          "status": "landed"
         }
       ],
       "toolIds": [],
       "contracts": [],
-      "tests": [],
-      "prs": [
-        "seed#1"
+      "tests": [
+        "test/capabilities.test.mjs"
       ],
-      "commits": [],
+      "prs": [
+        "seed#1",
+        "seed#2"
+      ],
+      "commits": [
+        "d9c6f7db5ef00c8122030141749cf34808cf3d33"
+      ],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-02",
       "role": "touches",
-      "status": "proposed",
-      "claim": "planned",
+      "status": "landed",
+      "claim": "implemented",
       "spec": "docs/docs/capabilities/CAP-02-docs-freshness-check.md",
       "slices": [
         {
           "id": "CAP-02.2",
           "title": "Self-test test/capabilities.test.mjs in seed",
           "milestone": "M2",
-          "status": "proposed"
+          "status": "landed"
         }
       ],
       "toolIds": [],
       "contracts": [],
-      "tests": [],
-      "prs": [],
+      "tests": [
+        "test/capabilities.test.mjs"
+      ],
+      "prs": [
+        "seed#2"
+      ],
       "commits": [],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-03",
@@ -158,7 +167,7 @@
       "slices": [
         {
           "id": "CAP-08.1",
-          "title": "Declarative team document validation checks",
+          "title": "Seed declarative team document validation checks",
           "milestone": "M3",
           "status": "proposed"
         }
@@ -172,7 +181,7 @@
       "commits": [],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-09",
@@ -208,7 +217,7 @@
       "slices": [
         {
           "id": "CAP-10.1",
-          "title": "Correlation IDs on run trace records",
+          "title": "Seed correlation IDs on run trace records",
           "milestone": "M4",
           "status": "proposed"
         }
@@ -222,7 +231,7 @@
       "commits": [],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-12",
@@ -311,7 +320,7 @@
       "slices": [
         {
           "id": "CAP-14.1",
-          "title": "Scripted and function model test doubles",
+          "title": "Seed scripted and function model test doubles",
           "milestone": "M5",
           "status": "proposed"
         }
@@ -325,7 +334,7 @@
       "commits": [],
       "adr": [],
       "decision": null,
-      "updated": "2026-11-23"
+      "updated": "2026-11-24"
     },
     {
       "id": "CAP-16",
