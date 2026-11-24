@@ -8,6 +8,9 @@ Seed is a public repository. Everything committed here can be read by anyone.
 2. `docs/architecture.md` — the planes and authority model.
 3. `docs/contracts/` — the three contracts: run model, tool identity, providers.
 4. `docs/lexicon.md` — the terminology rule for public repositories.
+5. `docs/capabilities/` - capability specifications and the repository ledger (`index.json`).
+
+Same-PR ledger rule: update `docs/capabilities/index.json`, the owning spec's `Evidence` and `Changes` sections, `docs/CHANGELOG.md`, and any touched contract `Changes` section in the same pull request as any capability change.
 
 ## Claim discipline
 
