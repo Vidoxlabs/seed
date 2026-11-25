@@ -1,3 +1,5 @@
+<!-- Managed file. Propose changes by pull request; they are carried into the shared templates. hash: 95c6a68d90fb01fc -->
+
 # Seed workspace
 
 Seed is a public repository. Everything committed here can be read by anyone.
